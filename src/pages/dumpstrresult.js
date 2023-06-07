@@ -1,51 +1,75 @@
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { useNavigate } from "react-router-dom";
-import { DumpstrAnalysis } from './dumpstranalysis';
-import React from 'react';
-import ReactDOM from "react-dom";
+import Button from "react-bootstrap/Button";
+import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { Spinner } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import axios from "./axios-client";
 
 export const DumpstrResult = () => {
-    const navigate = useNavigate();
+  let { jobId } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [result, setResult] = useState({});
 
-    const dumpstrA = () => {
-        navigate("/tools/dumpstr/dumpstranalysis");
-    };
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`/dumpstr/noauth/jobs/${jobId}`)
+      .then((response) => {
+        setResult(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        toast.error(error.response.data.message);
+        setLoading(false);
+      });
+  }, [jobId]);
 
-    const dumpstrR = () => {
-        navigate("/tools/dumpstr/dumpstrresult");
-    };
+  return (
+    <>
+      <h1> DumpSTR </h1>
+      <div className="mb-2 d-flex justifiy-content-center align-items -center">
+        <Link className="btn btn-secondary" to="/tools/dumpstr/dumpstranalysis">
+          New Analysis
+        </Link>
+        <Link
+          className="btn btn-secondary"
+          to={`/tools/dumpstr/dumpstrresult/${jobId}`}
+        >
+          Results
+        </Link>
+      </div>
 
-    
+      <h1 className="text-center">Job Results</h1>
 
-    
-    return (
-        <>
-            <h1> DumpSTR </h1>
-            <ButtonGroup size="lg" className="mb-2">
-                <Button variant="light" onClick={dumpstrA}>New Analysis</Button>
-                <Button variant="light" onClick={dumpstrR}>Results</Button>
-            </ButtonGroup>
-
-            <h1>  </h1>
-
-            {/* <div >
-            <Button
-              variant="contained"
-              color="primary"
-              className={mainClasses.button}
-              endIcon={<GetAppRounded />}
-              target={"_blank"}
-              href={`/results${annotRes.dumpFile}`}
-            >
-              Download Annotation Results
-            </Button>
-            </div> */}
-            {/* <Button variant="light" onClick={downloadFile} > Download file</Button> */}
-
-        </>
-    )
-    };
+      {loading && (
+        <div className="w-100 d-flex justify-content-center mt-3">
+          <Spinner className="spinner" animation="border" variant="dark" />
+        </div>
+      )}
+      {!loading && result.status === "running" && (
+        <div>
+          Job is currently running...Please refresh page to recheck status
+        </div>
+      )}
+      {!loading && result.status === "completed" && (
+        <div>
+          <Button
+            variant="primary"
+            target={"_blank"}
+            href={`/results${result.outputFile}`}
+          >
+            Download Results
+          </Button>
+        </div>
+      )}
+      {!loading && result.status === "failed" && (
+        <div>Job failed...Please execute a new analysis</div>
+      )}
+    </>
+  );
+};
 
 //646e2f10e127959424de06c6
 
@@ -59,8 +83,6 @@ export const DumpstrResult = () => {
 //     const dumpstrR = () => {
 //         navigate("/tools/dumpstr/dumpstrresult");
 //     };
-
-    
 
 //     const downloadFile=()=>{
 //         fetch('http://localhost:5029/api/v1/dumpstr/noauth/jobs/646e2f10e127959424de06c6')
@@ -88,10 +110,6 @@ export const DumpstrResult = () => {
 //         </>
 //     )
 //     };
-
-
-
-
 
 // export const DumpstrResult = () => {
 //     const navigate = useNavigate();
@@ -121,13 +139,11 @@ export const DumpstrResult = () => {
 
 //                 document.body.appendChild(link);
 
-                
 //                 setTimeout(() => {
 //                     link.click();
 
 //                     document.body.removeChild(link);
 
-                   
 //                     window.URL.revokeObjectURL(url);
 //                 }, 100);
 //             });
@@ -149,4 +165,3 @@ export const DumpstrResult = () => {
 //     );
 
 // }
-
