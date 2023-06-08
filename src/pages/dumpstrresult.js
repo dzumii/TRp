@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import axios from "./axios-client";
+import axios, { backendURL } from "./axios-client";
 
 export const DumpstrResult = () => {
   let { jobId } = useParams();
@@ -58,7 +58,10 @@ export const DumpstrResult = () => {
           <Button
             variant="primary"
             target={"_blank"}
-            href={`/results${result.outputFile}`}
+            // Change this to the variable of in the response object of the result
+            // Also ensure the path is the correct url path to the resource
+            // I made backendURL a global variable so that you can easily change it
+            href={`${backendURL}/results${result.outputFile}`}
           >
             Download Results
           </Button>

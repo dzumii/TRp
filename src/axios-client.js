@@ -10,4 +10,6 @@ const client = axios.create({
   },
 });
 
+export const backendURL = "http://localhost:5032/api/v1";
+
 export default client;
