@@ -49,7 +49,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Navbarr />
+        <Navbarr className="Navbarr" />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/tools" element={<Tools />} />
