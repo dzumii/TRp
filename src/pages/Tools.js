@@ -32,7 +32,7 @@ export const Tools = () => {
     <>
 
       {/* <h1>Available Tools </h1> */}
-      <div className="d-grid gap-2">
+      <div className="d-grid gap-2 p-4" style={{ height: "100vh" }}>
         <Button variant="light" size="lg" onClick={gangstr}> GangSTR </Button>
         <Button variant="light" size="lg" onClick={hipstr}> HipSTR </Button>
         <Button variant="light" size="lg" onClick={eh}> ExpansionHunter </Button>
@@ -42,7 +42,7 @@ export const Tools = () => {
         <Button variant="light" size="lg" onClick={qcstr}> qcSTR </Button>
         <Button variant="light" size="lg" onClick={statstr}> statSTR </Button>
       </div>
-      <h1> </h1>
+
     </>
 
   )

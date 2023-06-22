@@ -4,100 +4,216 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useNavigate } from "react-router-dom";
+
+import * as Yup from "yup";
+import { Formik, Field, ErrorMessage } from "formik";
+import React, { useState, useRef } from "react";
+import axios from "../axios-client.js";
+import { toast } from "react-toastify";
+import { LoadTestData } from "./utils";
+
+const validationSchema = Yup.object().shape({
+    email: Yup.string()
+        .email("Invalid email address")
+        .required("Email is required"),
+    job_name: Yup.string().required("Job name is required"),
+    // file: Yup.string().required("Please upload a file"),
+    useTest: Yup.boolean(),
+});
+
 export const MergestrAnalysis = () => {
+    const [formValues, setFormValues] = useState(null);
+    const [file, setfile] = useState("");
+    const [filename, setFilename] = useState("");
+    const [useTest, setUseTest] = useState(false);
+    const fileInput = useRef(null);
     const navigate = useNavigate();
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const mergestrA = () => {
-        navigate("/tools/hipstr/mergestranalysis");
+        navigate("/tools/mergestr/mergestranalysis");
     };
 
-    const mergestrR = () => {
-        navigate("/tools/hipstr/mergestrresult");
+    const mergestrResult = (jobID) => {
+        navigate(`/tools/mergestr/mergestrresult/${jobID}`);
+    };
+
+    const handlFormSubmit = (values) => {
+        console.log("vsaluessssss", values);
+
+        const formdata = new FormData();
+        formdata.append("email", values.email);
+        formdata.append("file", file);
+        formdata.append("job_name", values.job_name);
+        formdata.append("vcftype", values.vcftype);
+        formdata.append("useTest", values.useTest);
+        // formdata.append("filter_regions", values.filter_regions);
+
+        //modal
+        handleShow();
+
+        axios
+            .post("/mergestr/noauth/jobs", formdata, {
+                headers: { "Content-Type": "multipart/form-data" },
+            })
+            .then((response) => {
+                console.log("response: ", response);
+                const jobId = response.data.jobId;
+                mergestrResult(jobId);
+            })
+            .catch((error) => {
+                console.log("error: ", error);
+                toast.error(error.response.data.message);
+            });
+
+        console.log(values);
+    };
+
+    const handleFileChange = (e) => {
+        if (e && e.target?.files) {
+            setfile(e.target.files[0]);
+            setFilename(e.target.files[0].name);
+        }
+        console.log("ehnnn", e.target.files[0]);
+    };
+
+    const testValues = {
+        job_name: "Test hipstr",
+        email: "",
+        file: "",
+        useTest: true,
+
+        // ...(!user?.username && { email: "" }),
+    };
+
+    const initialValues = {
+        email: "",
+        job_name: "",
+        file: "",
+        useTest: false,
+    };
+
+    const handleUseTest = (event) => {
+        // Formik.resetForm();
+        setUseTest(true);
+        setFormValues(testValues);
+        fileInput.current.querySelector("input").disabled = true;
+    };
+
+    const handleRemoveUseTest = (event) => {
+        setUseTest(false);
+        setFormValues(undefined);
+        // Formik.setFieldValue("file", "");
+        fileInput.current.querySelector("input").value = "";
+        fileInput.current.querySelector("input").disabled = false;
+        // Formik.resetForm();
     };
 
     return (
         <>
             <h1>MergeSTR </h1>
             <ButtonGroup size="lg" className="mb-2">
-                <Button variant="light" onClick={mergestrA}>New Analysis</Button>
-                <Button variant="light" onClick={mergestrR}>Results</Button>
+                <Button variant="light" onClick={mergestrA}>
+                    New Analysis
+                </Button>
+                <Button disabled={true} variant="light"
+                    onClick={mergestrResult}>
+                    Results
+                </Button>
             </ButtonGroup>
 
-            <Form>
-                <Row className="mb-3">
-                    <Form.Group as={Col} className="mb-3" controlId="exampleForm.ControlTextarea1"> <Form.Label>Email address</Form.Label> <Form.Control type="email" placeholder="name@example.com" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"> <Form.Label>job</Form.Label><Form.Control placeholder="Job1" /></Form.Group>
-                    <Form.Group as={Col} controlId="formFile" className="mb-3"><Form.Label>vcf</Form.Label> <Form.Control type="file" /></Form.Group>
-                </Row>
+            <Formik
+                initialValues={formValues || initialValues}
+                enableReinitialize
+                validationSchema={validationSchema}
+                onSubmit={handlFormSubmit}
+                validateOnMount
+            >
+                {({ values, handleChange, handleSubmit, isValid }) => (
+                    <div>
+                        <Form onSubmit={Formik.handleSubmit}>
+                            <Row className="mb-3">
+                                <Col>
+                                    {LoadTestData({
+                                        // classes: classes,
+                                        useTest: useTest,
+                                        handleUseTest: handleUseTest,
+                                        handleRemoveUseTest: handleRemoveUseTest,
+                                        // onclick: () => setFormValues(testValues)
+                                    })}
+                                </Col>
+                            </Row>
+                        </Form>
 
-                <Form.Check type="switch" id="custom-switch" label="useTest" />
+                        <Row className="mb-3">
+                            <Form.Group as={Col} className="mb-3" controlId="email">
+                                <Form.Label>email</Form.Label>
+                                <Field
+                                    type="email"
+                                    name="email"
+                                    className="form-control"
+                                    onChange={handleChange}
+                                    value={values.email}
+                                />
+                                <ErrorMessage
+                                    name="email"
+                                    component="div"
+                                    className="text-danger"
+                                />
+                            </Form.Group>
+                            <Form.Group as={Col} controlId="job_name">
+                                <Form.Label>job_name</Form.Label>
+                                <Field
+                                    type="text"
+                                    name="job_name"
+                                    className="form-control"
+                                    onChange={handleChange}
+                                    value={values.job_name}
+                                />
+                                <ErrorMessage
+                                    name="job_name"
+                                    component="div"
+                                    className="text-danger"
+                                />
+                            </Form.Group>
+                        </Row>
 
-                <Form.Label>vcftype</Form.Label>
-                <Form.Select aria-label="Default select example"><option>auto</option><option value="1">advntr</option><option value="2">hipstr</option><option value="3">gangstr</option></Form.Select>
+                        <div className="form-control" ref={fileInput}>
+                            <label htmlFor="file">vcfs</label>
+                            <Field type="file" name="file" onChange={handleFileChange} multiple />
+                            <div>
+                                <p>{filename || ""}</p>
+                            </div>
+                            <ErrorMessage name="file" />
+                        </div>
 
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"> <Form.Label>num_records</Form.Label> <Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>min_locus_rate</Form.Label><Form.Control placeholder="" /> </Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>min_locus_hwep</Form.Label><Form.Control placeholder="" /></Form.Group>
-                </Row>
+                        <Row className="mb-3">
+                            <Form.Group as={Col} controlId="vcftype">
+                                <Form.Label>vcftype</Form.Label>
+                                <Form.Select
+                                    aria-label="Default select example"
+                                    onChange={handleChange}
+                                    name="vcftype"
+                                >
+                                    <option>auto</option>
+                                    <option value="advntr">advntr</option>
+                                    <option value="hipstr">hipstr</option>
+                                    <option value="gangstr">gangstr</option>
+                                </Form.Select>
+                            </Form.Group>
+                        </Row>
 
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>min_locus_het</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>max_locus_het</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="formFile" className="mb-3"><Form.Label>filter_regions</Form.Label> <Form.Control type="file" /></Form.Group>
-                </Row>
 
-                <Form.Group controlId="exampleForm.ControlTextarea2"><Form.Label>filter_regions_names</Form.Label><Form.Control placeholder="" /></Form.Group>
+                        <h1> </h1>
+                        <button type="button" disabled={!isValid} onClick={handleSubmit}>
+                            Submit
+                        </button>
 
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>hipstr_max_call_flank_indel</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>hipstr_max_call_stutter</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>hipstr_min_supp_reads</Form.Label><Form.Control placeholder="" /></Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>hipstr_min_call_DP</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>hipstr_max_call_DP</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>hipstr_min_call_Q</Form.Label><Form.Control placeholder="" /></Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>gangstr_min_call_DPl</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>gangstr_max_call_D</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>gangstr_min_call_Q</Form.Label><Form.Control placeholder="" /></Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>gangstr_expansion_prob_het</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>gangstr_expansion_prob_hom</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>gangstr_expansion_prob_total</Form.Label><Form.Control placeholder="" /></Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>advntr_min_spanning</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>advntr_min_flanking</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>advntr_min_ML</Form.Label><Form.Control placeholder="" /></Form.Group>
-                </Row>
-
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>eh_min_call_LC</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>eh_max_call_LC</Form.Label><Form.Control placeholder="" /></Form.Group>
-                </Row>
-                {/* <Form.Group controlId="exampleForm.ControlTextarea2"><Form.Label>popstr_min_call_DP</Form.Label><Form.Control placeholder="Job1" /></Form.Group>
-                </Row>
-                <Row className="mb-3">
-                <Form.Group controlId="exampleForm.ControlTextarea2"><Form.Label>eh_max_call_LC</Form.Label><Form.Control placeholder="Job1" /></Form.Group>
-                <Form.Group controlId="exampleForm.ControlTextarea2"><Form.Label>eh_max_call_LC</Form.Label><Form.Control placeholder="Job1" /></Form.Group> */}
-
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>popstr_min_call_DP</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>popstr_max_call_DP</Form.Label><Form.Control placeholder="" /></Form.Group>
-                    <Form.Group as={Col} controlId="exampleForm.ControlTextarea2"><Form.Label>popstr_require_support</Form.Label><Form.Control placeholder="" /></Form.Group>
-                </Row>
-
-            </Form >
-            <h1> </h1>
-            <Button variant="light" size="lg" > Submit </Button>
+                    </div>
+                )}
+            </Formik>
         </>
     );
 }

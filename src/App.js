@@ -1,49 +1,50 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import { Home } from "./pages/Home";
 import { Tools } from "./pages/Tools";
 import { Login } from "./pages/Login";
 import { Workflow } from "./pages/Workflow";
 import { Navbarr } from "./Navbar";
 
-import { Gangstr } from "./pages/Gangstr";
-import { GangstrAnalysis } from "./pages/gangstranalysis";
-import { GangstrResult } from "./pages/gangstrresult";
+import { Gangstr } from './pages/Gangstr';
+import { GangstrAnalysis } from './pages/gangstranalysis';
+import { GangstrResult } from './pages/gangstrresult';
 
-import { Hipstr } from "./pages/Hipstr";
-import { HipstrAnalysis } from "./pages/hipstranalysis";
-import { HipstrResult } from "./pages/hipstrresult";
+import { Hipstr } from './pages/Hipstr';
+import { HipstrAnalysis } from './pages/hipstranalysis';
+import { HipstrResult } from './pages/hipstrresult';
 
-import { Mergestr } from "./pages/Mergestr";
-import { MergestrAnalysis } from "./pages/mergestranalysis";
-import { MergestrResult } from "./pages/mergestrresult";
+import { Mergestr } from './pages/Mergestr';
+import { MergestrAnalysis } from './pages/mergestranalysis';
+import { MergestrResult } from './pages/mergestrresult';
 
-import { ExHunter } from "./pages/Eh";
-import { EhAnalysis } from "./pages/ehanalysis";
-import { EhResult } from "./pages/ehresult";
+import { ExHunter } from './pages/Eh';
+import { EhAnalysis } from './pages/ehanalysis';
+import { EhResult } from './pages/ehresult';
 
-import { Qcstr } from "./pages/Qcstr";
-import { QcstrAnalysis } from "./pages/qcstranalysis";
-import { QcstrResult } from "./pages/qcstrresult";
+import { Qcstr } from './pages/Qcstr';
+import { QcstrAnalysis } from './pages/qcstranalysis';
+import { QcstrResult } from './pages/qcstrresult';
 
-import { Statstr } from "./pages/Statstr";
-import { StatstrAnalysis } from "./pages/statstranalysis";
-import { StatstrResult } from "./pages/statstrresult";
 
-import { Dumpstr } from "./pages/Dumpstr";
-import { DumpstrAnalysis } from "./pages/dumpstranalysis";
-import { DumpstrResult } from "./pages/dumpstrresult";
+import { Statstr } from './pages/Statstr';
+import { StatstrAnalysis } from './pages/statstranalysis';
+import { StatstrResult } from './pages/statstrresult';
 
-import { Comparestr } from "./pages/Comparestr";
-import { ComparestrAnalysis } from "./pages/comparestranalysis";
-import { ComparestrResult } from "./pages/comparestrresult";
-import { Register } from "./pages/Register";
+import { Dumpstr } from './pages/Dumpstr';
+import { DumpstrAnalysis } from './pages/dumpstranalysis';
+import { DumpstrResult } from './pages/dumpstrresult';
 
-import "bootstrap/dist/css/bootstrap.min.css";
-// import Container from 'react-bootstrap/Container';
-// import Nav from 'react-bootstrap/Nav';
-// import{ Navbar as NaavvBaaarrr} from 'react-bootstrap/Navbar';
+import { Comparestr } from './pages/Comparestr';
+import { ComparestrAnalysis } from './pages/comparestranalysis';
+import { ComparestrResult } from './pages/comparestrresult';
+import { Register } from './pages/Register';
+
+import { ToastContainer } from 'react-toastify';
+
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
@@ -85,7 +86,7 @@ function App() {
             element={<MergestrAnalysis />}
           />
           <Route
-            path="/tools/mergestr/mergestrresult"
+            path="/tools/mergestr/mergestrresult/:jobId"
             element={<MergestrResult />}
           />
 
@@ -94,7 +95,9 @@ function App() {
             path="/tools/qcstr/qcstranalysis"
             element={<QcstrAnalysis />}
           />
-          <Route path="/tools/qcstr/qcstrresult" element={<QcstrResult />} />
+          <Route
+            path="/tools/qcstr/qcstrresult/:jobId"
+            element={<QcstrResult />} />
 
           <Route path="/tools/statstr" element={<Statstr />} />
           <Route
@@ -102,7 +105,7 @@ function App() {
             element={<StatstrAnalysis />}
           />
           <Route
-            path="/tools/statstr/statstrresult"
+            path="/tools/statstr/statstrresult/:jobId"
             element={<StatstrResult />}
           />
 
@@ -123,7 +126,7 @@ function App() {
             element={<ComparestrAnalysis />}
           />
           <Route
-            path="/tools/comparestr/comparestrresult"
+            path="/tools/comparestr/comparestrresult/:jobId"
             element={<ComparestrResult />}
           />
 
@@ -144,23 +147,5 @@ function App() {
     </div>
   );
 }
-
-// function App() {
-//   return (
-//     <>
-//       <Navbar bg="dark" variant="dark">
-//         <Container>
-//           <Navbar.Brand href="#home">Trp</Navbar.Brand>
-//           <Nav className="me-auto">
-//             <Nav.Link href="#home">Home</Nav.Link>
-//             <Nav.Link href="#features">Tools</Nav.Link>
-//             <Nav.Link href="#pricing">Tutorials</Nav.Link>
-//             <Nav.Link href="#pricing">Workflows</Nav.Link>
-//           </Nav>
-//         </Container>
-//       </Navbar>
-//       </>
-//   );
-// }
 
 export default App;

@@ -95,7 +95,7 @@ export const Home = () => {
 
 
 
-      <Row xs={2} md={4} className="g-4">
+      <Row xs={2} md={4} className="g-2 p-4" >
         <Col>
           <Card>
             {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
