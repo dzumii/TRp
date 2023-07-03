@@ -72,11 +72,61 @@ export const ComparestrResult = () => {
                         variant="secondary"
                         target={"_blank"}
                         size="lg"
-
                         href={`${backendURL}/results${result.compareFile}`}
                     >
-                        Download Results
+                        Download compare-samplecompare.tab
                     </Button>
+
+                    <Button
+                        variant="secondary"
+                        target={"_blank"}
+                        size="lg"
+                        href={`${backendURL}/results${result.compareFile2}`}
+                    >
+                        Download compare-samplecompare plot
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        target={"_blank"}
+                        size="lg"
+                        href={`${backendURL}/results${result.compareFile3}`}
+                    >
+                        Download compare-overall.tab
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        target={"_blank"}
+                        size="lg"
+                        href={`${backendURL}/results${result.compareFile4}`}
+                    >
+                        Download compare-locuscompare.tab
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        target={"_blank"}
+                        size="lg"
+                        href={`${backendURL}/results${result.compareFile5}`}
+                    >
+                        Download compare-locuscompare plot
+                    </Button>
+
+                    <Button
+                        variant="secondary"
+                        target={"_blank"}
+                        size="lg"
+                        href={`${backendURL}/results${result.compareFile6}`}
+                    >
+                        Download quality-per-sample plot
+                    </Button>
+
+
+
+
+
+
                 </div>
             )}
             {!loading && result.status === "failed" && (

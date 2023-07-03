@@ -40,6 +40,10 @@ import { ComparestrAnalysis } from './pages/comparestranalysis';
 import { ComparestrResult } from './pages/comparestrresult';
 import { Register } from './pages/Register';
 
+// import { Workflow } from './pages/Workflow';
+import { WorkflowAnalysis } from './pages/Workflowanalysis';
+import { WorkflowResult } from './pages/Workflowresult';
+
 import { ToastContainer } from 'react-toastify';
 
 
@@ -56,6 +60,12 @@ function App() {
           <Route path="/tools" element={<Tools />} />
           <Route path="/login" element={<Login />} />
           <Route path="/workflow" element={<Workflow />} />
+
+          <Route path="/workflow/newanalysis" element={<WorkflowAnalysis />} />
+          <Route
+            path="/workflow/result"
+            element={<WorkflowResult />}
+          />
 
           <Route path="/login/register" element={<Register />} />
 

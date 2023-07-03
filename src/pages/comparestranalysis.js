@@ -34,9 +34,12 @@ const validationSchema = Yup.object().shape({
 export const ComparestrAnalysis = () => {
     const [formValues, setFormValues] = useState(null);
     const [file, setfile] = useState("");
+    const [file2, setFile2] = useState("");
     const [filename, setFilename] = useState("");
+    const [filename2, setFilename2] = useState("");
     const [useTest, setUseTest] = useState(false);
     const fileInput = useRef(null);
+    const fileInput2 = useRef(null);
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -56,6 +59,7 @@ export const ComparestrAnalysis = () => {
         const formdata = new FormData();
         formdata.append("email", values.email);
         formdata.append("file", file);
+        formdata.append("file2", file2);
         formdata.append("job_name", values.job_name);
         formdata.append("vcftype1", values.vcftype1);
         formdata.append("vcftype2", values.vcftype2);
@@ -96,10 +100,18 @@ export const ComparestrAnalysis = () => {
         console.log("ehnnn", e.target.files[0]);
     };
 
+    const handleFileChange2 = (e) => {
+        if (e && e.target?.files) {
+            setFile2(e.target.files[0]);
+            setFilename2(e.target.files[0].name);
+        }
+    };
+
     const testValues = {
         job_name: "Test comparestr",
         email: "",
         file: "",
+        file2: "",
         useTest: true,
         samples: "",
         regions: "",
@@ -117,6 +129,7 @@ export const ComparestrAnalysis = () => {
         job_name: "Test comparestr",
         email: "",
         file: "",
+        file2: "",
         useTest: false,
         samples: "",
         regions: "",
@@ -221,13 +234,13 @@ export const ComparestrAnalysis = () => {
                             <ErrorMessage name="file" />
                         </div>
 
-                        <div className="form-control" ref={fileInput}>
+                        <div className="form-control" ref={fileInput2}>
                             <label htmlFor="file">vcf2</label>
-                            <Field type="file" name="file" onChange={handleFileChange} />
+                            <Field type="file" name="file2" onChange={handleFileChange2} />
                             <div>
-                                <p>{filename || ""}</p>
+                                <p>{filename2 || ""}</p>
                             </div>
-                            <ErrorMessage name="file" />
+                            <ErrorMessage name="file2" />
                         </div>
 
                         <Row className="mb-3">

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import * as Yup from "yup";
 import { Formik, Field, ErrorMessage } from "formik";
-import React, { useState, useRef } from "react";
+import React, { ChangeEvent, useState, useRef } from "react";
 import axios from "../axios-client.js";
 import { toast } from "react-toastify";
 import { LoadTestData } from "./utils";
@@ -23,8 +23,14 @@ const validationSchema = Yup.object().shape({
 
 export const MergestrAnalysis = () => {
     const [formValues, setFormValues] = useState(null);
-    const [file, setfile] = useState("");
-    const [filename, setFilename] = useState("");
+    // const [file, setfile] = useState("");
+    // const [filename, setFilename] = useState("");
+    // changes here
+
+    const [files, setFiles] = useState(null);
+    const [filenames, setFilenames] = useState([]);
+
+
     const [useTest, setUseTest] = useState(false);
     const fileInput = useRef(null);
     const navigate = useNavigate();
@@ -40,16 +46,46 @@ export const MergestrAnalysis = () => {
         navigate(`/tools/mergestr/mergestrresult/${jobID}`);
     };
 
-    const handlFormSubmit = (values) => {
-        console.log("vsaluessssss", values);
+    // const handlFormSubmit = (values) => {
+    //     console.log("vsaluessssss", values);
 
+    // changes here
+    const handlFormSubmit = (values) => {
+        console.log("values: ", values);
+
+        let joinedFiles = [];
+        console.log('fileeeeesss,', files);
+        Object.keys(files).map(file => {
+            joinedFiles.push(files[file]?.name)
+        })
+        console.log('files join', joinedFiles.join(','));
+
+        // const formdata = new FormData();
+        // formdata.append("email", values.email);
+        // formdata.append("file", file);
+        // formdata.append("job_name", values.job_name);
+        // formdata.append("vcftype", values.vcftype);
+        // formdata.append("useTest", values.useTest);
+        // // formdata.append("filter_regions", values.filter_regions);
+
+        // changes here
         const formdata = new FormData();
         formdata.append("email", values.email);
-        formdata.append("file", file);
+        if (files) {
+            Array.from(files).forEach((file, i) => {
+                console.log(file);
+                formdata.append(`file`, file, file.name);
+
+            });
+        }
+
+
         formdata.append("job_name", values.job_name);
         formdata.append("vcftype", values.vcftype);
         formdata.append("useTest", values.useTest);
-        // formdata.append("filter_regions", values.filter_regions);
+
+        console.log("Files:", formdata.getAll('file'));
+
 
         //modal
         handleShow();
@@ -71,12 +107,22 @@ export const MergestrAnalysis = () => {
         console.log(values);
     };
 
+    // const handleFileChange = (e) => {
+    //     if (e && e.target?.files) {
+    //         setfile(e.target.files[0]);
+    //         setFilename(e.target.files[0].name);
+    //     }
+    //     console.log("ehnnn", e.target.files[0]);
+    // };
+
+    // changes here
     const handleFileChange = (e) => {
-        if (e && e.target?.files) {
-            setfile(e.target.files[0]);
-            setFilename(e.target.files[0].name);
+        if (e.target.files && e.target.files.length > 0) {
+            const fileList = e.target.files;
+            const fileNames = Array.from(fileList).map((file) => file.name);
+            setFiles(fileList);
+            setFilenames(fileNames);
         }
-        console.log("ehnnn", e.target.files[0]);
     };
 
     const testValues = {
@@ -133,7 +179,8 @@ export const MergestrAnalysis = () => {
             >
                 {({ values, handleChange, handleSubmit, isValid }) => (
                     <div>
-                        <Form onSubmit={Formik.handleSubmit}>
+                        {/* <Form onSubmit={Formik.handleSubmit}> */}
+                        <Form onSubmit={handleSubmit}>
                             <Row className="mb-3">
                                 <Col>
                                     {LoadTestData({
@@ -180,15 +227,24 @@ export const MergestrAnalysis = () => {
                             </Form.Group>
                         </Row>
 
-                        <div className="form-control" ref={fileInput}>
+                        {/* <div className="form-control" ref={fileInput}>
                             <label htmlFor="file">vcfs</label>
                             <Field type="file" name="file" onChange={handleFileChange} multiple />
                             <div>
                                 <p>{filename || ""}</p>
                             </div>
                             <ErrorMessage name="file" />
-                        </div>
+                        </div> */}
 
+                        {/* changes here */}
+                        <div className="form-control" ref={fileInput}>
+                            <label htmlFor="file">vcfs</label>
+                            <input type="file" name="file" onChange={handleFileChange} multiple ref={fileInput} />
+                            <div>
+                                <p>{filenames.join(",")}</p>
+                            </div>
+                            <ErrorMessage name="file" />
+                        </div>
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="vcftype">
                                 <Form.Label>vcftype</Form.Label>
