@@ -3,46 +3,46 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Tools } from "./pages/Tools";
 import { Login } from "./pages/Login";
-import { Workflow } from "./pages/Workflow";
+import { Workflow } from "./pages/WORKFLOW/Workflow";
 import { Navbarr } from "./Navbar";
 
-import { Gangstr } from './pages/Gangstr';
-import { GangstrAnalysis } from './pages/gangstranalysis';
-import { GangstrResult } from './pages/gangstrresult';
+import { Gangstr } from './pages/GANGSTR/Gangstr';
+import { GangstrAnalysis } from './pages/GANGSTR/gangstranalysis';
+import { GangstrResult } from './pages/GANGSTR/gangstrresult';
 
-import { Hipstr } from './pages/Hipstr';
-import { HipstrAnalysis } from './pages/hipstranalysis';
-import { HipstrResult } from './pages/hipstrresult';
+import { Hipstr } from './pages/HIPSTR/Hipstr';
+import { HipstrAnalysis } from './pages/HIPSTR/hipstranalysis';
+import { HipstrResult } from './pages/HIPSTR/hipstrresult';
 
-import { Mergestr } from './pages/Mergestr';
-import { MergestrAnalysis } from './pages/mergestranalysis';
-import { MergestrResult } from './pages/mergestrresult';
+import { Mergestr } from './pages/MERGESTR/Mergestr';
+import { MergestrAnalysis } from './pages/MERGESTR/mergestranalysis';
+import { MergestrResult } from './pages/MERGESTR/mergestrresult';
 
-import { ExHunter } from './pages/Eh';
-import { EhAnalysis } from './pages/ehanalysis';
-import { EhResult } from './pages/ehresult';
+import { ExHunter } from './pages/EXPANSIONHUNTER/Eh';
+import { EhAnalysis } from './pages/EXPANSIONHUNTER/ehanalysis';
+import { EhResult } from './pages/EXPANSIONHUNTER/ehresult';
 
-import { Qcstr } from './pages/Qcstr';
-import { QcstrAnalysis } from './pages/qcstranalysis';
-import { QcstrResult } from './pages/qcstrresult';
+import { Qcstr } from './pages/QCSTR/Qcstr';
+import { QcstrAnalysis } from './pages/QCSTR/qcstranalysis';
+import { QcstrResult } from './pages/QCSTR/qcstrresult';
 
 
-import { Statstr } from './pages/Statstr';
-import { StatstrAnalysis } from './pages/statstranalysis';
-import { StatstrResult } from './pages/statstrresult';
+import { Statstr } from './pages/STATSTR/Statstr';
+import { StatstrAnalysis } from './pages/STATSTR/statstranalysis';
+import { StatstrResult } from './pages/STATSTR/statstrresult';
 
-import { Dumpstr } from './pages/Dumpstr';
-import { DumpstrAnalysis } from './pages/dumpstranalysis';
-import { DumpstrResult } from './pages/dumpstrresult';
+import { Dumpstr } from './pages/DUMPSTR/Dumpstr';
+import { DumpstrAnalysis } from './pages/DUMPSTR/dumpstranalysis';
+import { DumpstrResult } from './pages/DUMPSTR/dumpstrresult';
 
-import { Comparestr } from './pages/Comparestr';
-import { ComparestrAnalysis } from './pages/comparestranalysis';
-import { ComparestrResult } from './pages/comparestrresult';
+import { Comparestr } from './pages/COMPARESTR/Comparestr';
+import { ComparestrAnalysis } from './pages/COMPARESTR/comparestranalysis';
+import { ComparestrResult } from './pages/COMPARESTR/comparestrresult';
 import { Register } from './pages/Register';
 
 // import { Workflow } from './pages/Workflow';
-import { WorkflowAnalysis } from './pages/Workflowanalysis';
-import { WorkflowResult } from './pages/Workflowresult';
+import { WorkflowAnalysis } from './pages/WORKFLOW/Workflowanalysis';
+import { WorkflowResult } from './pages/WORKFLOW/Workflowresult';
 
 import { ToastContainer } from 'react-toastify';
 
@@ -75,7 +75,7 @@ function App() {
             element={<GangstrAnalysis />}
           />
           <Route
-            path="/tools/gangstr/gangstrresult"
+            path="/tools/gangstr/gangstrresult/:jobId"
             element={<GangstrResult />}
           />
 
@@ -84,7 +84,7 @@ function App() {
             path="/tools/hipstr/hipstranalysis"
             element={<HipstrAnalysis />}
           />
-          <Route path="/tools/hipstr/hipstrresult" element={<HipstrResult />} />
+          <Route path="/tools/hipstr/hipstrresult/:jobId" element={<HipstrResult />} />
 
           <Route path="/tools/eh" element={<ExHunter />} />
           <Route path="/tools/eh/ehanalysis" element={<EhAnalysis />} />

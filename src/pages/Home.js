@@ -49,7 +49,7 @@ export const Home = () => {
         <Carousel.Item interval={1000}>
           <img
             className="d-block w-100"
-            src={require("./dna.jpg")}
+            src={require("../images/dna.jpg")}
             alt="First slide"
           />
           <Carousel.Caption>
@@ -60,7 +60,7 @@ export const Home = () => {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src={require("./dna2.jpg")}
+            src={require("../images/dna2.jpg")}
             alt="Second slide"
           />
 
@@ -72,7 +72,7 @@ export const Home = () => {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src={require("./dan3.jpeg")}
+            src={require("../images/dan3.jpeg")}
             alt="Third slide"
           />
 
