@@ -19,10 +19,10 @@ const validationSchema = Yup.object().shape({
         .email("Invalid email address")
         .required("Email is required"),
     job_name: Yup.string().required("Job name is required"),
-    // file: Yup.string().required("Please upload a file"),
+    file: Yup.string().required("Please upload a vcf file"),
     useTest: Yup.boolean(),
-    num_records: Yup.number("num_records must be an integer"),
-    min_locus_rate: Yup.number("must be a float value"), //float
+    num_records: Yup.number("num_records must be an integer value"),
+    min_locus_callrate: Yup.number("must be a float value"), //float
     min_locus_hwep: Yup.number("must be a float value"), //float
     min_locus_het: Yup.number("must be a float value"), //float
     max_locus_het: Yup.number("must be a float value"), //float
@@ -34,7 +34,7 @@ const validationSchema = Yup.object().shape({
     hipstr_max_call_DP: Yup.number("must be an integer value"), //integer
     hipstr_min_call_Q: Yup.number("must be a float value"), //float
     gangstr_min_call_DPl: Yup.number("must be an integer value"), //integer
-    gangstr_max_call_D: Yup.number("must be an integer value"), //integer
+    gangstr_max_call_DP: Yup.number("must be an integer value"), //integer
     gangstr_min_call_Q: Yup.number("must be a float value"), //float
     gangstr_expansion_prob_het: Yup.number("must be a float value"), //float
     gangstr_expansion_prob_hom: Yup.number("must be a float value"), //float
@@ -58,8 +58,9 @@ export const DumpstrAnalysis = () => {
     const [useTest, setUseTest] = useState(false);
     const fileInput = useRef(null);
     const navigate = useNavigate();
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    // const [show, setShow] = useState(false);
+    const [setShow] = useState(false);
+    // const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const dumpstrA = () => {
@@ -79,7 +80,7 @@ export const DumpstrAnalysis = () => {
         formdata.append("job_name", values.job_name);
         formdata.append("vcftype", values.vcftype);
         formdata.append("useTest", values.useTest);
-        formdata.append("min_locus_rate", values.min_locus_rate);
+        formdata.append("min_locus_callrate", values.min_locus_callrate);
         formdata.append("min_locus_hwep", values.min_locus_hwep);
         formdata.append("min_locus_het", values.min_locus_het);
         formdata.append("max_locus_het", values.max_locus_het);
@@ -95,7 +96,7 @@ export const DumpstrAnalysis = () => {
         formdata.append("hipstr_max_call_DP", values.hipstr_max_call_DP);
         formdata.append("hipstr_min_call_Q", values.hipstr_min_call_Q);
         formdata.append("gangstr_min_call_DPl", values.gangstr_min_call_DPl);
-        formdata.append("gangstr_max_call_D", values.gangstr_max_call_D);
+        formdata.append("gangstr_max_call_DP", values.gangstr_max_call_DP);
         formdata.append("gangstr_min_call_Q", values.gangstr_min_call_Q);
         formdata.append(
             "gangstr_expansion_prob_het",
@@ -155,7 +156,7 @@ export const DumpstrAnalysis = () => {
         file: "",
         useTest: true,
         num_records: "",
-        min_locus_rate: "",
+        min_locus_callrate: "",
         min_locus_hwep: "",
         min_locus_het: "",
         max_locus_het: "",
@@ -167,7 +168,7 @@ export const DumpstrAnalysis = () => {
         hipstr_max_call_DP: "",
         hipstr_min_call_Q: "",
         gangstr_min_call_DPl: "",
-        gangstr_max_call_D: "",
+        gangstr_max_call_DP: "",
         gangstr_min_call_Q: "",
         gangstr_expansion_prob_het: "",
         gangstr_expansion_prob_hom: "",
@@ -191,8 +192,9 @@ export const DumpstrAnalysis = () => {
         job_name: "",
         file: "",
         useTest: false,
+        vcftype: "auto",
         num_records: "",
-        min_locus_rate: "",
+        min_locus_callrate: "",
         min_locus_hwep: "",
         min_locus_het: "",
         max_locus_het: "",
@@ -204,7 +206,7 @@ export const DumpstrAnalysis = () => {
         hipstr_max_call_DP: "",
         hipstr_min_call_Q: "",
         gangstr_min_call_DPl: "",
-        gangstr_max_call_D: "",
+        gangstr_max_call_DP: "",
         gangstr_min_call_Q: "",
         gangstr_expansion_prob_het: "",
         gangstr_expansion_prob_hom: "",
@@ -331,6 +333,8 @@ export const DumpstrAnalysis = () => {
                                                 <option value="advntr">advntr</option>
                                                 <option value="hipstr">hipstr</option>
                                                 <option value="gangstr">gangstr</option>
+                                                <option value="gangstr">popstr</option>
+                                                <option value="eh">eh</option>
                                             </Form.Select>
                                         </Form.Group>
                                     </Row>
@@ -354,19 +358,22 @@ export const DumpstrAnalysis = () => {
                                     </Row>
                                 </Accordion.Body>
                             </Accordion.Item>
+
+
+
                             <Accordion.Item eventKey="1">
                                 <Accordion.Header>Locus Level Filters</Accordion.Header>
                                 <Accordion.Body>
                                     <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="min_locus_rate">
-                                            <Form.Label>min_locus_rate</Form.Label>
+                                        <Form.Group as={Col} controlId="min_locus_callrate">
+                                            <Form.Label>min_locus_callrate</Form.Label>
                                             <Field
                                                 type="text"
-                                                name="min_locus_rate"
+                                                name="min_locus_callrate"
                                                 className="form-control"
                                             />
                                             <ErrorMessage
-                                                name="min_locus_rate"
+                                                name="min_locus_callrate"
                                                 component="div"
                                                 className="text-danger"
                                             />
@@ -553,15 +560,15 @@ export const DumpstrAnalysis = () => {
                                                 className="text-danger"
                                             />
                                         </Form.Group>
-                                        <Form.Group as={Col} controlId="gangstr_max_call_D">
-                                            <Form.Label>gangstr_max_call_D</Form.Label>
+                                        <Form.Group as={Col} controlId="gangstr_max_call_DP">
+                                            <Form.Label>gangstr_max_call_DP</Form.Label>
                                             <Field
                                                 type="text"
-                                                name="gangstr_max_call_D"
+                                                name="gangstr_max_call_DP"
                                                 className="form-control"
                                             />
                                             <ErrorMessage
-                                                name="gangstr_max_call_D"
+                                                name="gangstr_max_call_DP"
                                                 component="div"
                                                 className="text-danger"
                                             />

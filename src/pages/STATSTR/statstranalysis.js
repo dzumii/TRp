@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Accordion from "react-bootstrap/Accordion";
 
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
@@ -17,7 +18,7 @@ const validationSchema = Yup.object().shape({
         .email("Invalid email address")
         .required("Email is required"),
     job_name: Yup.string().required("Job name is required"),
-    // file: Yup.string().required("Please upload a file"),
+    file: Yup.string().required("Please upload a vcf file"),
     useTest: Yup.boolean(),
 
     samples: Yup.string("must be a list of comma seperated values"),
@@ -35,8 +36,9 @@ export const StatstrAnalysis = () => {
     const [useTest, setUseTest] = useState(false);
     const fileInput = useRef(null);
     const navigate = useNavigate();
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    // const [show, setShow] = useState(false);
+    const [setShow] = useState(false);
+    // const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const statstrA = () => {
@@ -108,7 +110,7 @@ export const StatstrAnalysis = () => {
         samples: "",
         sample_prefixes: "",
         region: "",
-        precision: "",
+        precision: "3",
         nalleles_thresh: "",
 
     };
@@ -207,109 +209,117 @@ export const StatstrAnalysis = () => {
                             <ErrorMessage name="file" />
                         </div>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="vcftype">
-                                <Form.Label>vcftype</Form.Label>
-                                <Form.Select
-                                    aria-label="Default select example"
-                                    onChange={handleChange}
-                                    name="vcftype"
-                                >
-                                    <option>auto</option>
-                                    <option value="advntr">advntr</option>
-                                    <option value="hipstr">hipstr</option>
-                                    <option value="gangstr">gangstr</option>
-                                </Form.Select>
-                            </Form.Group>
-                        </Row>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="samples">
-                                <Form.Label>samples</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="samples"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.samples}
-                                />
-                                <ErrorMessage
-                                    name="samples"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                        <Accordion>
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header>Other General Parameters</Accordion.Header>
+                                <Accordion.Body>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="sample_prefixes">
-                                <Form.Label>sample_prefixes</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="sample_prefixes"
-                                    className="form-control"
-                                />
-                                <ErrorMessage
-                                    name="sample_prefixes"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="vcftype">
+                                            <Form.Label>vcftype</Form.Label>
+                                            <Form.Select
+                                                aria-label="Default select example"
+                                                onChange={handleChange}
+                                                name="vcftype"
+                                            >
+                                                <option>auto</option>
+                                                <option value="advntr">advntr</option>
+                                                <option value="hipstr">hipstr</option>
+                                                <option value="gangstr">gangstr</option>
+                                                <option value="gangstr">popstr</option>
+                                                <option value="eh">eh</option>
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Row>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="region">
-                                <Form.Label>region</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="region"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.region}
-                                />
-                                <ErrorMessage
-                                    name="region"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="samples">
+                                            <Form.Label>samples</Form.Label>
+                                            <Field
+                                                type="text"
+                                                name="samples"
+                                                className="form-control"
+                                                onChange={handleChange}
+                                                value={values.samples}
+                                            />
+                                            <ErrorMessage
+                                                name="samples"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="precision">
-                                <Form.Label>precision</Form.Label>
-                                <Field
-                                    type="number"
-                                    name="precision"
-                                    className="form-control"
-                                />
-                                <ErrorMessage
-                                    name="precision"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="sample_prefixes">
+                                            <Form.Label>sample_prefixes</Form.Label>
+                                            <Field
+                                                type="text"
+                                                name="sample_prefixes"
+                                                className="form-control"
+                                            />
+                                            <ErrorMessage
+                                                name="sample_prefixes"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="nalleles_thresh">
-                                <Form.Label>nalleles_thresh</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="nalleles_thresh"
-                                    className="form-control"
-                                />
-                                <ErrorMessage
-                                    name="nalleles_thresh"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="region">
+                                            <Form.Label>region</Form.Label>
+                                            <Field
+                                                type="text"
+                                                name="region"
+                                                className="form-control"
+                                                onChange={handleChange}
+                                                value={values.region}
+                                            />
+                                            <ErrorMessage
+                                                name="region"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
 
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="precision">
+                                            <Form.Label>precision</Form.Label>
+                                            <Field
+                                                type="number"
+                                                name="precision"
+                                                className="form-control"
+                                            />
+                                            <ErrorMessage
+                                                name="precision"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
 
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="nalleles_thresh">
+                                            <Form.Label>nalleles_thresh</Form.Label>
+                                            <Field
+                                                type="text"
+                                                name="nalleles_thresh"
+                                                className="form-control"
+                                            />
+                                            <ErrorMessage
+                                                name="nalleles_thresh"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
+                                </Accordion.Body>
+                            </Accordion.Item>
 
-
+                        </Accordion>
                         <h1> </h1>
                         <button type="button" disabled={!isValid} onClick={handleSubmit}>
                             Submit
@@ -319,4 +329,4 @@ export const StatstrAnalysis = () => {
             </Formik>
         </>
     );
-}
+};

@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-
+import Accordion from "react-bootstrap/Accordion";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik, Field, ErrorMessage } from "formik";
@@ -19,16 +19,16 @@ const validationSchema = Yup.object().shape({
         .email("Invalid email address")
         .required("Email is required"),
     job_name: Yup.string().required("Job name is required"),
-    // file: Yup.string().required("Please upload a file"),
+    file: Yup.string().required("Please upload vcf1"),
+    file2: Yup.string().required("Please upload vcf2"),
     useTest: Yup.boolean(),
-
-    samples: Yup.string("must be a string"),
-    regions: Yup.string("must be a string"),
-    stratify_fields: Yup.string("must be a string"),
-    stratify_binsizes: Yup.string("must be a string"),
-    stratify_file: Yup.number("must be a float value"),
-    bubble_min: Yup.number("must be a float value"),
-    bubble_max: Yup.number("must be a float value"),
+    samples: Yup.string("must be a string value"),
+    regions: Yup.string("must be a string value"),
+    stratify_fields: Yup.string("must be a string value"),
+    stratify_binsizes: Yup.string("must be a string value"),
+    stratify_file: Yup.number("must be an integer value"),
+    bubble_min: Yup.number("must be an integer value"),
+    bubble_max: Yup.number("must be an integer value"),
 });
 
 export const ComparestrAnalysis = () => {
@@ -41,8 +41,9 @@ export const ComparestrAnalysis = () => {
     const fileInput = useRef(null);
     const fileInput2 = useRef(null);
     const navigate = useNavigate();
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    // const [show, setShow] = useState(false);
+    const [setShow] = useState(false);
+    // const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const comparestrA = () => {
@@ -131,6 +132,8 @@ export const ComparestrAnalysis = () => {
         file: "",
         file2: "",
         useTest: false,
+        vcftype1: "auto",
+        vcftype2: "auto",
         samples: "",
         regions: "",
         stratify_fields: "",
@@ -243,165 +246,198 @@ export const ComparestrAnalysis = () => {
                             <ErrorMessage name="file2" />
                         </div>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="vcftype1">
-                                <Form.Label>vcftype1</Form.Label>
-                                <Form.Select
-                                    aria-label="Default select example"
-                                    onChange={handleChange}
-                                    name="vcftype1"
-                                >
-                                    <option>auto</option>
-                                    <option value="advntr">advntr</option>
-                                    <option value="hipstr">hipstr</option>
-                                    <option value="gangstr">gangstr</option>
-                                </Form.Select>
-                            </Form.Group>
-                        </Row>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="vcftype2">
-                                <Form.Label>vcftype2</Form.Label>
-                                <Form.Select
-                                    aria-label="Default select example"
-                                    onChange={handleChange}
-                                    name="vcftype2"
-                                >
-                                    <option>auto</option>
-                                    <option value="advntr">advntr</option>
-                                    <option value="hipstr">hipstr</option>
-                                    <option value="gangstr">gangstr</option>
-                                </Form.Select>
-                            </Form.Group>
-                        </Row>
+                        <Accordion>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="samples">
-                                <Form.Label>samples</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="samples"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.samples}
-                                />
-                                <ErrorMessage
-                                    name="samples"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="regions">
-                                <Form.Label>regions</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="regions"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.regions}
-                                />
-                                <ErrorMessage
-                                    name="regions"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                            <Accordion.Item eventKey="1">
+                                <Accordion.Header>Filtering Options</Accordion.Header>
+                                <Accordion.Body>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="samples">
+                                            <Form.Label>samples</Form.Label>
+                                            <Field
+                                                type="text"
+                                                name="samples"
+                                                className="form-control"
+                                                onChange={handleChange}
+                                                value={values.samples}
+                                            />
+                                            <ErrorMessage
+                                                name="samples"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="stratify_fields">
-                                <Form.Label>stratify_fields</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="stratify_fields"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.stratify_fields}
-                                />
-                                <ErrorMessage
-                                    name="stratify_fields"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="regions">
+                                            <Form.Label>regions</Form.Label>
+                                            <Field
+                                                type="text"
+                                                name="regions"
+                                                className="form-control"
+                                                onChange={handleChange}
+                                                value={values.regions}
+                                            />
+                                            <ErrorMessage
+                                                name="regions"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="2">
+                                <Accordion.Header>Metrics to stratify results</Accordion.Header>
+                                <Accordion.Body>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="stratify_fields">
+                                            <Form.Label>stratify_fields</Form.Label>
+                                            <Field
+                                                type="text"
+                                                name="stratify_fields"
+                                                className="form-control"
+                                                onChange={handleChange}
+                                                value={values.stratify_fields}
+                                            />
+                                            <ErrorMessage
+                                                name="stratify_fields"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
 
 
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="stratify_binsizes">
-                                <Form.Label>stratify_binsizes</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="stratify_binsizes"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.stratify_binsizes}
-                                />
-                                <ErrorMessage
-                                    name="stratify_binsizes"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="stratify_binsizes">
+                                            <Form.Label>stratify_binsizes</Form.Label>
+                                            <Field
+                                                type="text"
+                                                name="stratify_binsizes"
+                                                className="form-control"
+                                                onChange={handleChange}
+                                                value={values.stratify_binsizes}
+                                            />
+                                            <ErrorMessage
+                                                name="stratify_binsizes"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="stratify_file">
-                                <Form.Label>stratify_file</Form.Label>
-                                <Field
-                                    type="number"
-                                    name="stratify_file"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.stratify_file}
-                                />
-                                <ErrorMessage
-                                    name="stratify_file"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="stratify_file">
+                                            <Form.Label>stratify_file</Form.Label>
+                                            <Field
+                                                type="number"
+                                                name="stratify_file"
+                                                className="form-control"
+                                                onChange={handleChange}
+                                                value={values.stratify_file}
+                                            />
+                                            <ErrorMessage
+                                                name="stratify_file"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
+                                </Accordion.Body>
+                            </Accordion.Item>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="bubble_min">
-                                <Form.Label>bubble_min</Form.Label>
-                                <Field
-                                    type="number"
-                                    name="bubble_min"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.bubble_min}
-                                />
-                                <ErrorMessage
-                                    name="bubble_min"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
 
-                        <Row className="mb-3">
-                            <Form.Group as={Col} controlId="bubble_max">
-                                <Form.Label>bubble_max</Form.Label>
-                                <Field
-                                    type="number"
-                                    name="bubble_max"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.bubble_max}
-                                />
-                                <ErrorMessage
-                                    name="bubble_max"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
+                            <Accordion.Item eventKey="3">
+                                <Accordion.Header>Plotting Options</Accordion.Header>
+                                <Accordion.Body>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="bubble_min">
+                                            <Form.Label>bubble_min</Form.Label>
+                                            <Field
+                                                type="number"
+                                                name="bubble_min"
+                                                className="form-control"
+                                                onChange={handleChange}
+                                                value={values.bubble_min}
+                                            />
+                                            <ErrorMessage
+                                                name="bubble_min"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
+
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="bubble_max">
+                                            <Form.Label>bubble_max</Form.Label>
+                                            <Field
+                                                type="number"
+                                                name="bubble_max"
+                                                className="form-control"
+                                                onChange={handleChange}
+                                                value={values.bubble_max}
+                                            />
+                                            <ErrorMessage
+                                                name="bubble_max"
+                                                component="div"
+                                                className="text-danger"
+                                            />
+                                        </Form.Group>
+                                    </Row>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header>Other Options</Accordion.Header>
+                                <Accordion.Body>
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="vcftype1">
+                                            <Form.Label>vcftype1</Form.Label>
+                                            <Form.Select
+                                                aria-label="Default select example"
+                                                onChange={handleChange}
+                                                name="vcftype1"
+                                            >
+                                                <option>auto</option>
+                                                <option value="advntr">advntr</option>
+                                                <option value="hipstr">hipstr</option>
+                                                <option value="gangstr">gangstr</option>
+                                                <option value="gangstr">popstr</option>
+                                                <option value="eh">eh</option>
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Row>
+
+
+
+                                    <Row className="mb-3">
+                                        <Form.Group as={Col} controlId="vcftype2">
+                                            <Form.Label>vcftype2</Form.Label>
+                                            <Form.Select
+                                                aria-label="Default select example"
+                                                onChange={handleChange}
+                                                name="vcftype2"
+                                            >
+                                                <option>auto</option>
+                                                <option value="advntr">advntr</option>
+                                                <option value="hipstr">hipstr</option>
+                                                <option value="gangstr">gangstr</option>
+                                                <option value="gangstr">popstr</option>
+                                                <option value="eh">eh</option>
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Row>
+                                </Accordion.Body>
+                            </Accordion.Item>
+
+                        </Accordion>
 
 
                         <h1> </h1>

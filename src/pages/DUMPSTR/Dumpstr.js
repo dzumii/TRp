@@ -21,43 +21,104 @@ export const Dumpstr = () => {
         <Button variant="light" onClick={dumpstrA}>New Analysis</Button>
         <Button variant="light" onClick={dumpstrR}>Results</Button>
       </ButtonGroup>
-      <Card body>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </Card>;
+      <Card style={{ padding: '0px' }}>
+        <Card.Body >
+          <div class="Compare">
+            <div class="Compare__1hUWQ">
+              <div class="MuiPaper-root Home_paper__1euug MuiPaper-outlined MuiPaper-rounded">
+                <p>Please see full documentation and examples at https://trtools.readthedocs.io/en/latest/source/dumpSTR.html</p>
+                <ol>
+                  <h3>Usage</h3>
+                  <p>DumpSTR filters VCF files with TR genotypes, performing call-level and locus-level filtering, and outputs a filtered VCF file. </p>
+
+
+                  <h3>Required Parameters:</h3>
+                  <ul>
+                    <li>vcf (VCF): VCF file to filter that has been generated by a supported genotyping tool.</li>
+
+                  </ul>
+
+                  <h3>Other general parameters:</h3>
+
+                  <ul>
+                    <li>vcftype (string): Which genotyping tool generated the input VCF. Default = auto. Necessary if it cannot be automatically inferred. One of: gangstr, advntr, hipstr, eh, popstr..</li>
+                    <li>num-records (int): only process this many records from the input VCF file.</li>
+                  </ul>
+
+                  <h3>Outputs</h3>
+                  <p>DumpSTR will output a filtered VCF file named dump.vcf, a sample log file dump.samplog.tab, and a locus log file dump.loclog.tab. See a description of output files below.</p>
+
+
+                  <h3>Filter Options</h3>
+                  <p>DumpSTR offers the following types of filters:</p>
+
+                  <h3>Locus-level filters</h3>
+                  <p>These filters are not specific to any tool and can be applied to any VCF file:</p>
+
+                  <ul>
+                    <li>min-locus-callrate (float): Filters loci with too few calls.</li>
+                    <li>min-locus-hwep (float): Filters loci departing from Hardy Weinberg equilibrium at some p-value threshold. Based on a two-sided binomial test comparing the observed vs. expected percent of calls that are homozygous.</li>
+                    <li>min-locus-het (float): Filters loci with low heteroyzgosity.</li>
+                    <li>max-locus-het (float): Filters loci with high heterozygosity </li>
+                    <li>filter-regions (BEDFILE,BEDFILE12,...): Filter TRs overlapping the specified set of regions. Must be used with --filter-regions-names. Can supply a comma-separated list to each to apply multiple region filters. Bed files must be sorted and tabix-indexed. </li>
+                    <li>filter-regions-names (string,string2,...): Filter names for each BED file specified in --filter-regions. </li>
+                  </ul>
+
+                  <h3>Call-level filters</h3>
+                  <h3>AdVNTR call-level filters</h3>
+                  <ul>
+                    <li>advntr-min-spanning (int): Minimum spanning read count (SR field). </li>
+                    <li>advntr-min-flanking (int): Minimum flanking read count (FR field). </li>
+                    <li>advntr-min-ML(float): Minimum value of maximum likelihood (ML field). </li>
+                  </ul>
+
+                  <h3>ExpansionHunter call-level filters</h3>
+                  <ul>
+
+                    <li>eh-min-call-LC (int): Minimum call coverage. Based on LC field. </li>
+                    <li>eh-max-call-LC (int): Maximum call coverage. Based on LC field. </li>
+                  </ul>
+
+                  <h3>GangSTR call-level filters</h3>
+                  <ul>
+                    <li>gangstr-min-call-DP (int): Minimum call coverage. Based on DP field. </li>
+                    <li>gangstr-max-call-DP (int): Maximum call coverage. Based on DP field. </li>
+                    <li>gangstr-min-call-Q(float): Minimum call quality score. Based on Q field. </li>
+                    <li>gangstr-expansion-prob-het(float): Expansion prob-value threshold. Filters calls with probability of heterozygous expansion less than this. Based on QEXP field. </li>
+                    <li>gangstr-expansion-prob-hom(float): Expansion prob-value threshold. Filters calls with probability of homozygous expansion less than this. Based on QEXP field. </li>
+                    <li>gangstr-expansion-prob-total(float): Expansion prob-value threshold. Filters calls with probability of homozygous or heterozygous expansion less than this. Based on QEXP field. </li>
+                    <li> </li>
+                  </ul>
+
+                  <h3>PopSTR call-level filters</h3>
+                  <ul>
+                    <li>popstr-min-call-DP (int): Minimum call coverage. Based on DP field. </li>
+                    <li>popstr-max-call-DP (int): Maximum call coverage. Based on DP field. </li>
+                    <li>popstr-require-support (int): Require each allele call to have at least n supporting reads. Based on AD field. </li>
+                  </ul>
+
+
+
+
+                  <h3>Metrics to stratify results:</h3>
+                  <ul>
+                    <li>stratify-fields: Comma-separated list of FORMAT fields to stratify by. e.g. DP,Q.</li>
+                    <li>stratify-binsizes: Comma-separated list of min:max:binsize to stratify each field on. Must be same length as --stratify-fields. e.g. 0:50:5,0:1:0.1 . The range [min, max] is inclusive.</li>
+                    <li>stratify-file: Specify which file to look at the --stratify-fields in. If set to 0, apply to both files. If set to 1, apply only to --vcf1. If set to 2, apply only to --vcf2.</li>
+                  </ul>
+
+                  <h3>Plotting options:</h3>
+                  <ul>
+                    <li>bubble-min: Minimum x/y axis value to display on bubble plots.</li>
+                    <li>bubble-max: Maximum x/y axis value to display on bubble plots.</li>
+                  </ul>
+
+                </ol>
+              </div>
+            </div>
+          </div>
+        </Card.Body>;
+      </Card>
 
     </>
   );

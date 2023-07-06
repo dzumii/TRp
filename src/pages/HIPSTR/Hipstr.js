@@ -22,43 +22,40 @@ export const Hipstr = () => {
                 <Button variant="light" onClick={hipstrA}>New Analysis</Button>
                 <Button variant="light" onClick={hipstrR}>Results</Button>
             </ButtonGroup>
-            <Card body>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </Card>;
+            <Card style={{ padding: '0px' }}>
+                <Card.Body >
+                    <div class="Compare">
+                        <div class="Compare__1hUWQ">
+                            <div class="MuiPaper-root Home_paper__1euug MuiPaper-outlined MuiPaper-rounded">
+                                <p>Please see full documentation and examples at https://github.com/HipSTR-Tool/HipSTR</p>
+                                <ol>
+                                    <h3>Usage</h3>
+                                    <p>HipSTR is the most reliable tool for genotyping STRs from Illumina sequencing data. </p>
+
+                                    <h3>Required Parameters:</h3>
+                                    <ul>
+                                        <li>bams : a comma-separated list of BAM/CRAM files generated by BWA-MEM and sorted and indexed using samtools.</li>
+                                        <li>regions : a BED file containing the coordinates for each STR region of interest. Download BED files for various organisms, including humans, from here</li>
+                                        <li>fasta : FASTA file containing the sequence for each chromosome in the BED file. This build's coordinates must match those of the STR regions.</li>
+
+                                    </ul>
+
+                                    <h3>Additional Usage Options</h3>
+                                    <ul>
+                                        <li>haploid-chrs:Comma separated list of chromosomes to treat as haploid (Default = all diploid). Why? You're analyzing a haploid chromosome like chrY</li>
+                                        <li>use-unpaired:Use unpaired reads when genotyping (Default = False).Why? Your sequencing data only contains single-ended reads</li>
+                                        <li>bam-samps:Comma separated list of samples in same order as BAM files.Assign each read the sample corresponding to its file. By default,each read must have an RG tag and and the sample is determined from the SM field.Why? Your BAM file RG tags don't have an SM field</li>
+                                        <li>bam-libs:Comma separated list of libraries in same order as BAM files.Assign each read the library corresponding to its file. By default,each read must have an RG tag and and the library is determined from the LB field.NOTE: This option is required when --bam-samps has been specified.Why? Your BAM file RG tags don't have an LB tag</li>
+                                        <li>min-reads:Minimum total reads required to genotype a locus (Default = 100)</li>
+                                    </ul>
+
+                                </ol>
+
+                            </div>
+                        </div>
+                    </div>
+                </Card.Body>;
+            </Card>
         </>
     );
 }

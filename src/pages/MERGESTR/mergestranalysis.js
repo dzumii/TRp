@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 import * as Yup from "yup";
 import { Formik, Field, ErrorMessage } from "formik";
-import React, { ChangeEvent, useState, useRef } from "react";
+// import React, { ChangeEvent, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import axios from "../../axios-client.js";
 import { toast } from "react-toastify";
 import { LoadTestData } from "../utils.js";
@@ -17,7 +18,7 @@ const validationSchema = Yup.object().shape({
         .email("Invalid email address")
         .required("Email is required"),
     job_name: Yup.string().required("Job name is required"),
-    // file: Yup.string().required("Please upload a file"),
+    file: Yup.string().required("Please upload a vcf file"),
     useTest: Yup.boolean(),
 });
 
@@ -29,13 +30,12 @@ export const MergestrAnalysis = () => {
 
     const [files, setFiles] = useState(null);
     const [filenames, setFilenames] = useState([]);
-
-
     const [useTest, setUseTest] = useState(false);
     const fileInput = useRef(null);
     const navigate = useNavigate();
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    // const [show, setShow] = useState(false);
+    const [setShow] = useState(false);
+    // const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const mergestrA = () => {
@@ -257,6 +257,8 @@ export const MergestrAnalysis = () => {
                                     <option value="advntr">advntr</option>
                                     <option value="hipstr">hipstr</option>
                                     <option value="gangstr">gangstr</option>
+                                    <option value="gangstr">popstr</option>
+                                    <option value="eh">eh</option>
                                 </Form.Select>
                             </Form.Group>
                         </Row>
