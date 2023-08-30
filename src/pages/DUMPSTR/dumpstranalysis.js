@@ -19,8 +19,9 @@ const validationSchema = Yup.object().shape({
         .email("Invalid email address")
         .required("Email is required"),
     job_name: Yup.string().required("Job name is required"),
-    file: Yup.string().required("Please upload a vcf file"),
+    // file: Yup.string().required("Please upload a vcf file"),
     useTest: Yup.boolean(),
+    vcftype: Yup.string("must be a list of comma seperated values"), //string
     num_records: Yup.number("num_records must be an integer value"),
     min_locus_callrate: Yup.number("must be a float value"), //float
     min_locus_hwep: Yup.number("must be a float value"), //float
@@ -61,7 +62,7 @@ export const DumpstrAnalysis = () => {
     // const [show, setShow] = useState(false);
     const [setShow] = useState(false);
     // const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    // const handleShow = () => setShow(true);
 
     const dumpstrA = () => {
         navigate("/tools/dumpstr/dumpstranalysis");
@@ -86,10 +87,7 @@ export const DumpstrAnalysis = () => {
         formdata.append("max_locus_het", values.max_locus_het);
         // formdata.append("filter_regions", values.filter_regions);
         formdata.append("filter_regions_names", values.filter_regions_names);
-        formdata.append(
-            "hipstr_max_call_flank_indel",
-            values.hipstr_max_call_flank_indel
-        );
+        formdata.append("hipstr_max_call_flank_indel", values.hipstr_max_call_flank_indel);
         formdata.append("hipstr_max_call_stutter", values.hipstr_max_call_stutter);
         formdata.append("hipstr_min_supp_reads", values.hipstr_min_supp_reads);
         formdata.append("hipstr_min_call_DP", values.hipstr_min_call_DP);
@@ -98,18 +96,9 @@ export const DumpstrAnalysis = () => {
         formdata.append("gangstr_min_call_DPl", values.gangstr_min_call_DPl);
         formdata.append("gangstr_max_call_DP", values.gangstr_max_call_DP);
         formdata.append("gangstr_min_call_Q", values.gangstr_min_call_Q);
-        formdata.append(
-            "gangstr_expansion_prob_het",
-            values.gangstr_expansion_prob_het
-        );
-        formdata.append(
-            "gangstr_expansion_prob_hom",
-            values.gangstr_expansion_prob_hom
-        );
-        formdata.append(
-            "gangstr_expansion_prob_total",
-            values.gangstr_expansion_prob_total
-        );
+        formdata.append("gangstr_expansion_prob_het", values.gangstr_expansion_prob_het);
+        formdata.append("gangstr_expansion_prob_hom", values.gangstr_expansion_prob_hom);
+        formdata.append("gangstr_expansion_prob_total", values.gangstr_expansion_prob_total);
         formdata.append("advntr_min_call_DP", values.advntr_min_call_DP);
         formdata.append("advntr_max_call_DP", values.advntr_max_call_DP);
         formdata.append("advntr_min_spanning", values.advntr_min_spanning);
@@ -123,7 +112,7 @@ export const DumpstrAnalysis = () => {
         formdata.append("num_records", values.num_records);
 
         //modal
-        handleShow();
+        // handleShow();
 
         axios
             .post("/dumpstr/noauth/jobs", formdata, {
@@ -151,10 +140,11 @@ export const DumpstrAnalysis = () => {
     };
 
     const testValues = {
-        job_name: "Test hipstr",
+        job_name: "Test dumpstr",
         email: "",
         file: "",
         useTest: true,
+        vcftype: "advntr",
         num_records: "",
         min_locus_callrate: "",
         min_locus_hwep: "",
@@ -189,7 +179,7 @@ export const DumpstrAnalysis = () => {
 
     const initialValues = {
         email: "",
-        job_name: "",
+        job_name: "Test dumpstr",
         file: "",
         useTest: false,
         vcftype: "auto",
@@ -241,539 +231,551 @@ export const DumpstrAnalysis = () => {
 
     return (
         <>
-            <h1>DumpSTR </h1>
-            <ButtonGroup size="lg" className="mb-2">
-                <Button variant="light" onClick={dumpstrA}>
-                    New Analysis
-                </Button>
-                <Button disabled={true} variant="light" onClick={dumpstrResult}>
-                    Results
-                </Button>
-            </ButtonGroup>
 
-            <Formik
-                initialValues={formValues || initialValues}
-                enableReinitialize
-                validationSchema={validationSchema}
-                onSubmit={handlFormSubmit}
-                validateOnMount
-            >
-                {({ values, handleChange, handleSubmit, isValid }) => (
-                    <div>
-                        <Form onSubmit={Formik.handleSubmit}>
-                            <Row className="mb-3">
-                                <Col>
-                                    {LoadTestData({
-                                        // classes: classes,
-                                        useTest: useTest,
-                                        handleUseTest: handleUseTest,
-                                        handleRemoveUseTest: handleRemoveUseTest,
-                                        // onclick: () => setFormValues(testValues)
-                                    })}
-                                </Col>
-                            </Row>
-                        </Form>
-
-                        <Row className="mb-3">
-                            <Form.Group as={Col} className="mb-3" controlId="email">
-                                <Form.Label>email</Form.Label>
-                                <Field
-                                    type="email"
-                                    name="email"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.email}
-                                />
-                                <ErrorMessage
-                                    name="email"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="job_name">
-                                <Form.Label>job_name</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="job_name"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.job_name}
-                                />
-                                <ErrorMessage
-                                    name="job_name"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
-
-                        <div className="form-control" ref={fileInput}>
-                            <label htmlFor="file">vcf</label>
-                            <Field type="file" name="file" onChange={handleFileChange} />
-                            <div>
-                                <p>{filename || ""}</p>
-                            </div>
-                            <ErrorMessage name="file" />
+            <div className="login-page">
+                <div class="form">
+                    <div class="login">
+                        <div class="login-header">
+                            <h3>DumpSTR </h3>
                         </div>
-
-                        <h1> </h1>
-                        <Accordion>
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header>Other General Parameters</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="vcftype">
-                                            <Form.Label>vcftype</Form.Label>
-                                            <Form.Select
-                                                aria-label="Default select example"
-                                                onChange={handleChange}
-                                                name="vcftype"
-                                            >
-                                                <option>auto</option>
-                                                <option value="advntr">advntr</option>
-                                                <option value="hipstr">hipstr</option>
-                                                <option value="gangstr">gangstr</option>
-                                                <option value="gangstr">popstr</option>
-                                                <option value="eh">eh</option>
-                                            </Form.Select>
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="num_records">
-                                            <Form.Label>num_records</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="num_record"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.num_records}
-                                            />
-                                            <ErrorMessage
-                                                name="num_records"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-
-
-                            <Accordion.Item eventKey="1">
-                                <Accordion.Header>Locus Level Filters</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="min_locus_callrate">
-                                            <Form.Label>min_locus_callrate</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="min_locus_callrate"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="min_locus_callrate"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="min_locus_hwep">
-                                            <Form.Label>min_locus_hwep</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="min_locus_hwep"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="min_locus_hwep"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="min_locus_het">
-                                            <Form.Label>min_locus_het</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="min_locus_het"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="min_locus_het"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="max_locus_het">
-                                            <Form.Label>max_locus_het</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="max_locus_het"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="max_locus_het"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="formFile" className="mb-3">
-                                            <Form.Label>filter_regions</Form.Label>{" "}
-                                            <Field
-                                                // type="file"
-                                                type="text"
-                                                name="filter_regions"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="filter_regions"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="filter_regions_names">
-                                            <Form.Label>filter_regions_names</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="filter_regions_names"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="filter_regions_names"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                            <Accordion.Item eventKey="2">
-                                <Accordion.Header>HipSTR Call-level Filters</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group
-                                            as={Col}
-                                            controlId="hipstr_max_call_flank_indel"
-                                        >
-                                            <Form.Label>hipstr_max_call_flank_indel</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="hipstr_max_call_flank_indel"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="hipstr_max_call_flank_indel"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="hipstr_max_call_stutter">
-                                            <Form.Label>hipstr_max_call_stutter</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="hipstr_max_call_stutter"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="hipstr_max_call_stutter"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="hipstr_min_supp_reads">
-                                            <Form.Label>hipstr_min_supp_reads</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="hipstr_min_supp_reads"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="hipstr_min_supp_reads"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="hipstr_min_call_DP">
-                                            <Form.Label>hipstr_min_call_DP</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="hipstr_min_call_DP"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="hipstr_min_call_DP"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="hipstr_max_call_DP">
-                                            <Form.Label>hipstr_max_call_DP</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="hipstr_max_call_DP"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="hipstr_max_call_DP"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="hipstr_min_call_Q">
-                                            <Form.Label>hipstr_min_call_Q</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="hipstr_min_call_Q"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="hipstr_min_call_Q"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                            <Accordion.Item eventKey="3">
-                                <Accordion.Header>GangSTR Call-level Filters</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="gangstr_min_call_DPl">
-                                            <Form.Label>gangstr_min_call_DPl</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="gangstr_min_call_DPl"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="gangstr_min_call_DPl"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="gangstr_max_call_DP">
-                                            <Form.Label>gangstr_max_call_DP</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="gangstr_max_call_DP"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="gangstr_max_call_DP"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="gangstr_min_call_Q">
-                                            <Form.Label>gangstr_min_call_Q</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="gangstr_min_call_Q"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="gangstr_min_call_Q"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="gangstr_expansion_prob_het">
-                                            <Form.Label>gangstr_expansion_prob_het</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="gangstr_expansion_prob_het"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="gangstr_expansion_prob_het"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="gangstr_expansion_prob_hom">
-                                            <Form.Label>gangstr_expansion_prob_hom</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="gangstr_expansion_prob_hom"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="gangstr_expansion_prob_hom"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group
-                                            as={Col}
-                                            controlId="gangstr_expansion_prob_total"
-                                        >
-                                            <Form.Label>gangstr_expansion_prob_total</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="gangstr_expansion_prob_total"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="gangstr_expansion_prob_total"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                            <Accordion.Item eventKey="4">
-                                <Accordion.Header>adVNTR Call-level Filters</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="advntr_min_spanning">
-                                            <Form.Label>advntr_min_spanning</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="advntr_min_spanning"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="advntr_min_spanning"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="advntr_min_flanking">
-                                            <Form.Label>advntr_min_flanking</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="advntr_min_flanking"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="advntr_min_flanking"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="advntr_min_ML">
-                                            <Form.Label>advntr_min_ML</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="advntr_min_ML"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="advntr_min_ML"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                            <Accordion.Item eventKey="5">
-                                <Accordion.Header>
-                                    ExpansionHunter Call-level Filters
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="eh_min_call_LC">
-                                            <Form.Label>eh_min_call_LC</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="eh_min_call_LC"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="eh_min_call_LC"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="eh_max_call_LC">
-                                            <Form.Label>eh_max_call_LC</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="eh_max_call_LC"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="eh_max_call_LC"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                            <Accordion.Item eventKey="6">
-                                <Accordion.Header>PopSTR Call-level Filters</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="popstr_min_call_DP">
-                                            <Form.Label>popstr_min_call_DP</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="popstr_min_call_DP"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="popstr_min_call_DP"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="popstr_max_call_DP">
-                                            <Form.Label>popstr_max_call_DP</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="popstr_max_call_DP"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="popstr_max_call_DP"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                        <Form.Group as={Col} controlId="popstr_require_support">
-                                            <Form.Label>popstr_require_support</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="popstr_require_support"
-                                                className="form-control"
-                                            />
-                                            <ErrorMessage
-                                                name="popstr_require_support"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
-
-                        <h1> </h1>
-                        <button type="button" disabled={!isValid} onClick={handleSubmit}>
-                            Submit
-                        </button>
-
                     </div>
-                )}
-            </Formik>
+
+
+                    <ButtonGroup size="lg" className="mb-2">
+                        <Button variant="light" onClick={dumpstrA}>
+                            Analysis
+                        </Button>
+                        <Button disabled={true} variant="light" onClick={dumpstrResult}>
+                            Results
+                        </Button>
+                    </ButtonGroup>
+
+                    <Formik
+                        initialValues={formValues || initialValues}
+                        enableReinitialize
+                        validationSchema={validationSchema}
+                        onSubmit={handlFormSubmit}
+                        validateOnMount
+                    >
+                        {({ values, handleChange, handleSubmit, isValid }) => (
+                            <div>
+                                <Form onSubmit={Formik.handleSubmit}>
+                                    <Row className="mb-3">
+                                        <Col>
+                                            {LoadTestData({
+                                                // classes: classes,
+                                                useTest: useTest,
+                                                handleUseTest: handleUseTest,
+                                                handleRemoveUseTest: handleRemoveUseTest,
+                                                onclick: () => setFormValues(testValues)
+                                            })}
+                                        </Col>
+                                    </Row>
+                                </Form>
+
+                                <Row className="mb-3">
+                                    <Form.Group as={Col} className="mb-3" controlId="email">
+                                        <Form.Label className='card-title'>email</Form.Label>
+                                        <Field
+                                            type="email"
+                                            name="email"
+                                            className="form-control"
+                                            onChange={handleChange}
+                                            value={values.email}
+                                        />
+                                        <ErrorMessage
+                                            name="email"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </Form.Group>
+                                    <Form.Group as={Col} controlId="job_name">
+                                        <Form.Label className='card-title'>job name</Form.Label>
+                                        <Field
+                                            type="text"
+                                            name="job_name"
+                                            className="form-control"
+                                            onChange={handleChange}
+                                            value={values.job_name}
+                                        />
+                                        <ErrorMessage
+                                            name="job_name"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </Form.Group>
+                                </Row>
+
+                                <div className="form-control" ref={fileInput}>
+                                    <label htmlFor="file" className='card-title'>vcf</label>
+                                    <input type="file" name="file" onChange={handleFileChange} />
+                                    <div>
+                                        <p>{filename || ""}</p>
+                                    </div>
+                                    <ErrorMessage name="file" />
+                                </div>
+
+                                <h1> </h1>
+                                <Accordion>
+                                    <Accordion.Item eventKey="0">
+                                        <Accordion.Header>Other General Parameters</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="vcftype">
+                                                    <Form.Label className='card-title'>vcftype</Form.Label>
+                                                    <Field
+                                                        as="select"
+                                                        aria-label="Default select example"
+                                                        onChange={handleChange}
+                                                        name="vcftype"
+                                                    >
+                                                        <option>auto</option>
+                                                        <option value="advntr">advntr</option>
+                                                        <option value="hipstr">hipstr</option>
+                                                        <option value="gangstr">gangstr</option>
+                                                        <option value="gangstr">popstr</option>
+                                                        <option value="eh">eh</option>
+                                                    </Field>
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="num_records">
+                                                    <Form.Label className='card-title'>num_records</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="num_record"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.num_records}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="num_records"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+
+
+                                    <Accordion.Item eventKey="1">
+                                        <Accordion.Header>Locus Level Filters</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="min_locus_callrate">
+                                                    <Form.Label className='card-title'>min_locus_callrate</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="min_locus_callrate"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="min_locus_callrate"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="min_locus_hwep">
+                                                    <Form.Label className='card-title'>min_locus_hwep</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="min_locus_hwep"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="min_locus_hwep"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="min_locus_het">
+                                                    <Form.Label className='card-title'>min_locus_het</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="min_locus_het"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="min_locus_het"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="max_locus_het">
+                                                    <Form.Label className='card-title'>max_locus_het</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="max_locus_het"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="max_locus_het"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="formFile" className="mb-3">
+                                                    <Form.Label className='card-title'>filter_regions</Form.Label>{" "}
+                                                    <Field
+                                                        // type="file"
+                                                        type="text"
+                                                        name="filter_regions"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="filter_regions"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="filter_regions_names">
+                                                    <Form.Label className='card-title'>filter_regions_names</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="filter_regions_names"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="filter_regions_names"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+                                    <Accordion.Item eventKey="2">
+                                        <Accordion.Header>HipSTR Call-level Filters</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group
+                                                    as={Col}
+                                                    controlId="hipstr_max_call_flank_indel"
+                                                >
+                                                    <Form.Label className='card-title'>hipstr_max_call_flank_indel</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="hipstr_max_call_flank_indel"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="hipstr_max_call_flank_indel"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="hipstr_max_call_stutter">
+                                                    <Form.Label className='card-title'>hipstr_max_call_stutter</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="hipstr_max_call_stutter"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="hipstr_max_call_stutter"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="hipstr_min_supp_reads">
+                                                    <Form.Label className='card-title'>hipstr_min_supp_reads</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="hipstr_min_supp_reads"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="hipstr_min_supp_reads"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="hipstr_min_call_DP">
+                                                    <Form.Label className='card-title'>hipstr_min_call_DP</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="hipstr_min_call_DP"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="hipstr_min_call_DP"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="hipstr_max_call_DP">
+                                                    <Form.Label className='card-title'>hipstr_max_call_DP</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="hipstr_max_call_DP"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="hipstr_max_call_DP"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="hipstr_min_call_Q">
+                                                    <Form.Label className='card-title'>hipstr_min_call_Q</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="hipstr_min_call_Q"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="hipstr_min_call_Q"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+                                    <Accordion.Item eventKey="3">
+                                        <Accordion.Header>GangSTR Call-level Filters</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="gangstr_min_call_DPl">
+                                                    <Form.Label className='card-title'>gangstr_min_call_DPl</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="gangstr_min_call_DPl"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="gangstr_min_call_DPl"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="gangstr_max_call_DP">
+                                                    <Form.Label className='card-title'>gangstr_max_call_DP</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="gangstr_max_call_DP"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="gangstr_max_call_DP"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="gangstr_min_call_Q">
+                                                    <Form.Label className='card-title'>gangstr_min_call_Q</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="gangstr_min_call_Q"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="gangstr_min_call_Q"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="gangstr_expansion_prob_het">
+                                                    <Form.Label className='card-title'>gangstr_expansion_prob_het</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="gangstr_expansion_prob_het"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="gangstr_expansion_prob_het"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="gangstr_expansion_prob_hom">
+                                                    <Form.Label className='card-title'>gangstr_expansion_prob_hom</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="gangstr_expansion_prob_hom"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="gangstr_expansion_prob_hom"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group
+                                                    as={Col}
+                                                    controlId="gangstr_expansion_prob_total"
+                                                >
+                                                    <Form.Label className='card-title'>gangstr_expansion_prob_total</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="gangstr_expansion_prob_total"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="gangstr_expansion_prob_total"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+                                    <Accordion.Item eventKey="4">
+                                        <Accordion.Header>adVNTR Call-level Filters</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="advntr_min_spanning">
+                                                    <Form.Label className='card-title'>advntr_min_spanning</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="advntr_min_spanning"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="advntr_min_spanning"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="advntr_min_flanking">
+                                                    <Form.Label className='card-title'>advntr_min_flanking</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="advntr_min_flanking"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="advntr_min_flanking"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="advntr_min_ML">
+                                                    <Form.Label className='card-title'>advntr_min_ML</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="advntr_min_ML"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="advntr_min_ML"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+                                    <Accordion.Item eventKey="5">
+                                        <Accordion.Header>
+                                            ExpansionHunter Call-level Filters
+                                        </Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="eh_min_call_LC">
+                                                    <Form.Label className='card-title'>eh_min_call_LC</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="eh_min_call_LC"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="eh_min_call_LC"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="eh_max_call_LC">
+                                                    <Form.Label className='card-title'>eh_max_call_LC</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="eh_max_call_LC"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="eh_max_call_LC"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+                                    <Accordion.Item eventKey="6">
+                                        <Accordion.Header>PopSTR Call-level Filters</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="popstr_min_call_DP">
+                                                    <Form.Label className='card-title'>popstr_min_call_DP</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="popstr_min_call_DP"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="popstr_min_call_DP"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="popstr_max_call_DP">
+                                                    <Form.Label className='card-title'>popstr_max_call_DP</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="popstr_max_call_DP"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="popstr_max_call_DP"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                                <Form.Group as={Col} controlId="popstr_require_support">
+                                                    <Form.Label className='card-title'>popstr_require_support</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="popstr_require_support"
+                                                        className="form-control"
+                                                    />
+                                                    <ErrorMessage
+                                                        name="popstr_require_support"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                </Accordion>
+
+                                <h1> </h1>
+                                <button type="button" disabled={!isValid} onClick={handleSubmit}>
+                                    Submit
+                                </button>
+
+                            </div>
+                        )}
+                    </Formik>
+                </div>
+            </div>
         </>
     );
 };

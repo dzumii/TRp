@@ -60,7 +60,7 @@ export const GangstrAnalysis = () => {
     const navigate = useNavigate();
     const [setShow] = useState(false);
     // const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    // const handleShow = () => setShow(true);
 
     const gangstrA = () => {
         navigate("/tools/gangstr/gangstranalysis");
@@ -107,7 +107,7 @@ export const GangstrAnalysis = () => {
 
 
         //modal
-        handleShow();
+        // handleShow();
 
         axios
             .post("/gangstr/noauth/jobs", formdata, {
@@ -233,570 +233,582 @@ export const GangstrAnalysis = () => {
 
     return (
         <>
-            <h1>GangSTR </h1>
-            <ButtonGroup size="lg" className="mb-2">
-                <Button variant="light" onClick={gangstrA}>
-                    New Analysis
-                </Button>
-                <Button disabled={true} variant="light" onClick={gangstrResult}>
-                    Results
-                </Button>
-            </ButtonGroup>
-
-            <Formik
-                initialValues={formValues || initialValues}
-                enableReinitialize
-                validationSchema={validationSchema}
-                onSubmit={handlFormSubmit}
-                validateOnMount
-            >
-                {({ values, handleChange, handleSubmit, isValid }) => (
-                    <div>
-                        <Form onSubmit={Formik.handleSubmit}>
-                            <Row className="mb-3">
-                                <Col>
-                                    {LoadTestData({
-                                        // classes: classes,
-                                        useTest: useTest,
-                                        handleUseTest: handleUseTest,
-                                        handleRemoveUseTest: handleRemoveUseTest,
-                                        // onclick: () => setFormValues(testValues)
-                                    })}
-                                </Col>
-                            </Row>
-                        </Form>
-
-                        <Row className="mb-3">
-                            <Form.Group as={Col} className="mb-3" controlId="email">
-                                <Form.Label>email</Form.Label>
-                                <Field
-                                    type="email"
-                                    name="email"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.email}
-                                />
-                                <ErrorMessage
-                                    name="email"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="job_name">
-                                <Form.Label>job_name</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="job_name"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.job_name}
-                                />
-                                <ErrorMessage
-                                    name="job_name"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
-                        <h6>Required parameters</h6>
-                        <div className="form-control" ref={fileInput}>
-                            <label htmlFor="file">bam</label>
-                            <Field type="file" name="file" onChange={handleFileChange} />
-                            <div>
-                                <p>{filename || ""}</p>
-                            </div>
-                            <ErrorMessage name="file" />
+            <div className="login-page">
+                <div class="form">
+                    <div class="login">
+                        <div class="login-header">
+                            <h3>gangSTR</h3>
                         </div>
-
-                        <div className="form-control" ref={fileInput2}>
-                            <label htmlFor="file">ref</label>
-                            <Field type="file" name="file2" onChange={handleFileChange2} />
-                            <div>
-                                <p>{filename2 || ""}</p>
-                            </div>
-                            <ErrorMessage name="file2" />
-                        </div>
-
-
-                        <div className="form-control" ref={fileInput3}>
-                            <label htmlFor="file">regions</label>
-                            <Field type="file" name="file3" onChange={handleFileChange3} />
-                            <div>
-                                <p>{filename3 || ""}</p>
-                            </div>
-                            <ErrorMessage name="file3" />
-                        </div>
-
-                        <Accordion>
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header>Additional general options:</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="chrom">
-                                            <Form.Label>chrom</Form.Label>
-                                            <Form.Select
-                                                aria-label="Default select example"
-                                                onChange={handleChange}
-                                                name="chrom"
-                                            >
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
-                                                <option value="10">10</option>
-                                                <option value="11">11</option>
-                                                <option value="12">12</option>
-                                                <option value="13">13</option>
-                                                <option value="14">14</option>
-                                                <option value="15">15</option>
-                                                <option value="16">16</option>
-                                                <option value="17">17</option>
-                                                <option value="18">18</option>
-                                                <option value="19">19</option>
-                                                <option value="20">20</option>
-                                                <option value="21">21</option>
-                                                <option value="22">22</option>
-                                                <option value="23">23</option>
-                                            </Form.Select>
-                                        </Form.Group>
-                                    </Row>
-
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="bam_samps">
-                                            <Form.Label>bam_samps</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="bam_samps"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.bam_samps}
-                                            />
-                                            <ErrorMessage
-                                                name="bam_samps"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="samp_sex">
-                                            <Form.Label>samp_sex</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="samp_sex"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.samp_sex}
-                                            />
-                                            <ErrorMessage
-                                                name="samp_sex"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="period">
-                                            <Form.Label>period</Form.Label>
-                                            <Field
-                                                type="text"
-                                                name="period"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.period}
-                                            />
-                                            <ErrorMessage
-                                                name="period"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-
-                            <Accordion.Item eventKey="1">
-                                <Accordion.Header>Options for different sequencing settings</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="readlength">
-                                            <Form.Label>readlength</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="readlength"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.readlength}
-                                            />
-                                            <ErrorMessage
-                                                name="readlength"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="coverage">
-                                            <Form.Label>coverage</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="coverage"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.coverage}
-                                            />
-                                            <ErrorMessage
-                                                name="coverage"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="insertmean">
-                                            <Form.Label>insertmean</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="insertmean"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.insertmean}
-                                            />
-                                            <ErrorMessage
-                                                name="insertmean"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="insertsdev">
-                                            <Form.Label>insertsdev</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="insertsdev"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.insertsdev}
-                                            />
-                                            <ErrorMessage
-                                                name="insertsdev"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="min_sample_reads">
-                                            <Form.Label>min_sample_reads</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="min_sample_reads"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.min_sample_reads}
-                                            />
-                                            <ErrorMessage
-                                                name="min_sample_reads"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                            <Accordion.Item eventKey="2">
-                                <Accordion.Header>Advanced parameters for likelihood model:</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="frrweight">
-                                            <Form.Label>frrweight</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="frrweight"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.frrweight}
-                                            />
-                                            <ErrorMessage
-                                                name="frrweight"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="spanweight">
-                                            <Form.Label>spanweight</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="spanweight"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.spanweight}
-                                            />
-                                            <ErrorMessage
-                                                name="spanweight"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="enclweight">
-                                            <Form.Label>enclweight</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="enclweight"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.enclweight}
-                                            />
-                                            <ErrorMessage
-                                                name="enclweight"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="flankweight">
-                                            <Form.Label>flankweight</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="flankweight"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.flankweight}
-                                            />
-                                            <ErrorMessage
-                                                name="flankweight"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="ploidy">
-                                            <Form.Label>ploidy</Form.Label>
-                                            <Form.Select
-                                                aria-label="Default select example"
-                                                onChange={handleChange}
-                                                name="ploidy"
-                                            >
-
-                                                <option value="2">2</option>
-                                                <option value="1">1</option>
-
-                                            </Form.Select>
-                                        </Form.Group>
-                                    </Row>
-
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="numbstrap">
-                                            <Form.Label>numbstrap</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="numbstrap"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.numbstrap}
-                                            />
-                                            <ErrorMessage
-                                                name="numbstrap"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="grid_theshold">
-                                            <Form.Label>grid_theshold</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="grid_theshold"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.grid_theshold}
-                                            />
-                                            <ErrorMessage
-                                                name="grid_theshold"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="rescue_count">
-                                            <Form.Label>rescue_count</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="rescue_count"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.rescue_count}
-                                            />
-                                            <ErrorMessage
-                                                name="rescue_count"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="max_proc_read">
-                                            <Form.Label>max_proc_read</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="max_proc_read"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.max_proc_read}
-                                            />
-                                            <ErrorMessage
-                                                name="max_proc_read"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                            <Accordion.Item eventKey="3">
-                                <Accordion.Header>Parameters for local realignment:</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="minscore">
-                                            <Form.Label>minscore</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="minscore"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.minscore}
-                                            />
-                                            <ErrorMessage
-                                                name="minscore"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="minmatch">
-                                            <Form.Label>minmatch</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="minmatch"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.minmatch}
-                                            />
-                                            <ErrorMessage
-                                                name="minmatch"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                            <Accordion.Item eventKey="4">
-                                <Accordion.Header>Stutter model parameters:</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="stutterup">
-                                            <Form.Label>stutterup</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="stutterup"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.stutterup}
-                                            />
-                                            <ErrorMessage
-                                                name="stutterup"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="stutterdown">
-                                            <Form.Label>stutterdown</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="stutterdown"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.stutterdown}
-                                            />
-                                            <ErrorMessage
-                                                name="stutterdown"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="stutterprob">
-                                            <Form.Label>stutterprob</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="stutterprob"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.stutterprob}
-                                            />
-                                            <ErrorMessage
-                                                name="stutterprob"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
-
-
-
-                        <h1> </h1>
-                        <button type="button" disabled={!isValid} onClick={handleSubmit}>
-                            Submit
-                        </button>
                     </div>
-                )}
-            </Formik>
+
+
+                    <ButtonGroup size="lg" className="mb-2">
+                        <Button variant="light" onClick={gangstrA}>
+                            Analysis
+                        </Button>
+                        <Button disabled={true} variant="light" onClick={gangstrResult}>
+                            Results
+                        </Button>
+                    </ButtonGroup>
+
+                    <Formik
+                        initialValues={formValues || initialValues}
+                        enableReinitialize
+                        validationSchema={validationSchema}
+                        onSubmit={handlFormSubmit}
+                        validateOnMount
+                    >
+                        {({ values, handleChange, handleSubmit, isValid }) => (
+                            <div>
+                                <Form onSubmit={Formik.handleSubmit}>
+                                    <Row className="mb-3">
+                                        <Col>
+                                            {LoadTestData({
+                                                // classes: classes,
+                                                useTest: useTest,
+                                                handleUseTest: handleUseTest,
+                                                handleRemoveUseTest: handleRemoveUseTest,
+                                                // onclick: () => setFormValues(testValues)
+                                            })}
+                                        </Col>
+                                    </Row>
+                                </Form>
+
+                                <Row className="mb-3">
+                                    <Form.Group as={Col} className="mb-3" controlId="email">
+                                        <Form.Label className='card-title'>email</Form.Label>
+                                        <Field
+                                            type="email"
+                                            name="email"
+                                            className="form-control"
+                                            onChange={handleChange}
+                                            value={values.email}
+                                        />
+                                        <ErrorMessage
+                                            name="email"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </Form.Group>
+                                    <Form.Group as={Col} controlId="job_name">
+                                        <Form.Label className='card-title'>job_name</Form.Label>
+                                        <Field
+                                            type="text"
+                                            name="job_name"
+                                            className="form-control"
+                                            onChange={handleChange}
+                                            value={values.job_name}
+                                        />
+                                        <ErrorMessage
+                                            name="job_name"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </Form.Group>
+                                </Row>
+                                <h6>Required parameters</h6>
+                                <div className="form-control" ref={fileInput}>
+                                    <label htmlFor="file" className='card-title'>bam</label>
+                                    <Field type="file" name="file" onChange={handleFileChange} />
+                                    <div>
+                                        <p>{filename || ""}</p>
+                                    </div>
+                                    <ErrorMessage name="file" />
+                                </div>
+
+                                <div className="form-control" ref={fileInput2}>
+                                    <label htmlFor="file" className='card-title'>ref</label>
+                                    <Field type="file" name="file2" onChange={handleFileChange2} />
+                                    <div>
+                                        <p>{filename2 || ""}</p>
+                                    </div>
+                                    <ErrorMessage name="file2" />
+                                </div>
+
+
+                                <div className="form-control" ref={fileInput3}>
+                                    <label htmlFor="file" className='card-title'>regions</label>
+                                    <Field type="file" name="file3" onChange={handleFileChange3} />
+                                    <div>
+                                        <p>{filename3 || ""}</p>
+                                    </div>
+                                    <ErrorMessage name="file3" />
+                                </div>
+
+                                <Accordion>
+                                    <Accordion.Item eventKey="0">
+                                        <Accordion.Header>Additional general options:</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="chrom">
+                                                    <Form.Label className='card-title'>chrom</Form.Label>
+                                                    <Form.Select
+                                                        aria-label="Default select example"
+                                                        onChange={handleChange}
+                                                        name="chrom"
+                                                    >
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                        <option value="13">13</option>
+                                                        <option value="14">14</option>
+                                                        <option value="15">15</option>
+                                                        <option value="16">16</option>
+                                                        <option value="17">17</option>
+                                                        <option value="18">18</option>
+                                                        <option value="19">19</option>
+                                                        <option value="20">20</option>
+                                                        <option value="21">21</option>
+                                                        <option value="22">22</option>
+                                                        <option value="23">23</option>
+                                                    </Form.Select>
+                                                </Form.Group>
+                                            </Row>
+
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="bam_samps">
+                                                    <Form.Label className='card-title'>bam_samps</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="bam_samps"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.bam_samps}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="bam_samps"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="samp_sex">
+                                                    <Form.Label className='card-title'>samp_sex</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="samp_sex"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.samp_sex}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="samp_sex"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="period">
+                                                    <Form.Label className='card-title'>period</Form.Label>
+                                                    <Field
+                                                        type="text"
+                                                        name="period"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.period}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="period"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+
+                                    <Accordion.Item eventKey="1">
+                                        <Accordion.Header>Options for different sequencing settings</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="readlength">
+                                                    <Form.Label className='card-title'>readlength</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="readlength"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.readlength}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="readlength"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="coverage">
+                                                    <Form.Label className='card-title'>coverage</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="coverage"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.coverage}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="coverage"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="insertmean">
+                                                    <Form.Label className='card-title'>insertmean</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="insertmean"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.insertmean}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="insertmean"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="insertsdev">
+                                                    <Form.Label className='card-title'>insertsdev</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="insertsdev"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.insertsdev}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="insertsdev"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="min_sample_reads">
+                                                    <Form.Label className='card-title'>min_sample_reads</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="min_sample_reads"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.min_sample_reads}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="min_sample_reads"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+                                    <Accordion.Item eventKey="2">
+                                        <Accordion.Header>Advanced parameters for likelihood model:</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="frrweight">
+                                                    <Form.Label className='card-title'>frrweight</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="frrweight"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.frrweight}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="frrweight"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="spanweight">
+                                                    <Form.Label className='card-title'>spanweight</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="spanweight"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.spanweight}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="spanweight"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="enclweight">
+                                                    <Form.Label className='card-title'>enclweight</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="enclweight"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.enclweight}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="enclweight"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="flankweight">
+                                                    <Form.Label className='card-title'>flankweight</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="flankweight"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.flankweight}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="flankweight"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="ploidy">
+                                                    <Form.Label className='card-title'>ploidy</Form.Label>
+                                                    <Form.Select
+                                                        aria-label="Default select example"
+                                                        onChange={handleChange}
+                                                        name="ploidy"
+                                                    >
+
+                                                        <option value="2">2</option>
+                                                        <option value="1">1</option>
+
+                                                    </Form.Select>
+                                                </Form.Group>
+                                            </Row>
+
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="numbstrap">
+                                                    <Form.Label className='card-title'>numbstrap</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="numbstrap"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.numbstrap}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="numbstrap"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="grid_theshold">
+                                                    <Form.Label className='card-title'>grid_theshold</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="grid_theshold"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.grid_theshold}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="grid_theshold"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="rescue_count">
+                                                    <Form.Label className='card-title'>rescue_count</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="rescue_count"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.rescue_count}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="rescue_count"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="max_proc_read">
+                                                    <Form.Label className='card-title'>max_proc_read</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="max_proc_read"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.max_proc_read}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="max_proc_read"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+                                    <Accordion.Item eventKey="3">
+                                        <Accordion.Header>Parameters for local realignment:</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="minscore">
+                                                    <Form.Label className='card-title'>minscore</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="minscore"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.minscore}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="minscore"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="minmatch">
+                                                    <Form.Label className='card-title'>minmatch</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="minmatch"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.minmatch}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="minmatch"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+                                    <Accordion.Item eventKey="4">
+                                        <Accordion.Header>Stutter model parameters:</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="stutterup">
+                                                    <Form.Label className='card-title'>stutterup</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="stutterup"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.stutterup}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="stutterup"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="stutterdown">
+                                                    <Form.Label className='card-title'>stutterdown</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="stutterdown"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.stutterdown}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="stutterdown"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="stutterprob">
+                                                    <Form.Label className='card-title'>stutterprob</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="stutterprob"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.stutterprob}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="stutterprob"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                </Accordion>
+
+
+
+                                <h1> </h1>
+                                <button type="button" disabled={!isValid} onClick={handleSubmit}>
+                                    Submit
+                                </button>
+                            </div>
+                        )}
+                    </Formik>
+
+                </div>
+            </div>
+
         </>
     );
 };

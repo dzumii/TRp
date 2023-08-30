@@ -18,8 +18,8 @@ export const ExHunter = () => {
     <>
       <h1>ExpansionHunter </h1>
       <ButtonGroup size="lg" className="mb-2">
-        <Button variant="light" onClick={ehA}>New Analysis</Button>
-        <Button variant="light" onClick={ehR}>Results</Button>
+        <Button variant="light" onClick={ehA} className='card-button'>New Analysis</Button>
+        <Button variant="light" onClick={ehR} className='card-button'>Results</Button>
       </ButtonGroup>
       <Card body>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

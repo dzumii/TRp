@@ -19,23 +19,38 @@ export const Login = () => {
 
 
   return (
-    <>
+    <div className="login-page">
+      <div class="form">
+        <div class="login">
+          <div class="login-header">
+            <h3>Welcome</h3>
+            <p>Please enter your credentials to login.</p>
+          </div>
+        </div>
 
-      <Form>
-        <Row className="mb-3">
-          <Form.Group controlId="exampleForm.ControlTextarea2"> <Form.Label>username</Form.Label><Form.Control placeholder="Job1" /></Form.Group>
-          <Form.Group controlId="exampleForm.ControlTextarea2"> <Form.Label>password</Form.Label><Form.Control placeholder="Job1" /></Form.Group>
+        <Form className="login-form">
+          <Row className="mb-3">
+            <Form.Group controlId="exampleForm.ControlTextarea2">
+              <Form.Control placeholder="username" />
+            </Form.Group>
+            <Form.Group controlId="exampleForm.ControlTextarea2">
+              <Form.Control placeholder="password" />
+            </Form.Group>
+          </Row>
 
-        </Row>
+          <ButtonGroup size="lg" className="mb-2">
+            <Button variant="light" size="lg" onClick={home}>
+              Login
+            </Button>
+            <Button variant="light" size="lg" onClick={register}>
+              Register
+            </Button>
+          </ButtonGroup>
 
-      </Form >
-      <h1> </h1>
-      <ButtonGroup size="lg" className="mb-2">
-        <Button variant="light" size="lg" onClick={home} > Submit </Button>
-        <Button variant="light" size="lg" onClick={register}>Sign Up</Button>
-      </ButtonGroup>
-      <h1> </h1>
-    </>
+        </Form>
+
+      </div>
+    </div>
   );
 }
 

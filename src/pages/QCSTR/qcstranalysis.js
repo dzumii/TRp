@@ -18,9 +18,9 @@ const validationSchema = Yup.object().shape({
         .email("Invalid email address")
         .required("Email is required"),
     job_name: Yup.string().required("Job name is required"),
-    file: Yup.string().required("Please upload a vcf file"),
+    // file: Yup.string().required("Please upload a vcf file"),
     useTest: Yup.boolean(),
-
+    vcftype: Yup.string("must be a list of comma seperated values"), //string
     period: Yup.number("must be a float value"),
     refbias_binsize: Yup.number("must be a float value"),
     refbias_mingts: Yup.number("must be a float value"),
@@ -39,7 +39,7 @@ export const QcstrAnalysis = () => {
     // const [show, setShow] = useState(false);
     const [setShow] = useState(false);
     // const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    // const handleShow = () => setShow(true);
 
     const qcstrA = () => {
         navigate("/tools/qcstr/qcstranalysis");
@@ -58,14 +58,14 @@ export const QcstrAnalysis = () => {
         formdata.append("job_name", values.job_name);
         formdata.append("vcftype", values.vcftype);
         formdata.append("useTest", values.useTest);
-        formdata.append("samples", values.samples);
-        formdata.append("sample_prefixes", values.sample_prefixes);
-        formdata.append("region", values.region);
-        formdata.append("precision", values.precision);
-        formdata.append("nalleles_thresh", values.nalleles_thresh);
+        formdata.append("period", values.period);
+        formdata.append("refbias_binsize", values.refbias_binsize);
+        formdata.append("refbias_mingts", values.refbias_mingts);
+        formdata.append("refbias_xrange_min", values.refbias_xrange_min);
+        formdata.append("refbias_xrange_max", values.refbias_xrange_max);
 
         //modal
-        handleShow();
+        // handleShow();
 
         axios
             .post("/qcstr/noauth/jobs", formdata, {
@@ -96,6 +96,7 @@ export const QcstrAnalysis = () => {
         email: "",
         file: "",
         useTest: true,
+        vcftype: "gangstr",
         period: "",
         refbias_binsize: "",
         refbias_mingts: "",
@@ -111,8 +112,9 @@ export const QcstrAnalysis = () => {
         email: "",
         file: "",
         useTest: false,
+        vcftype: "auto",
         period: "",
-        refbias_binsize: "5",
+        refbias_binsize: "",
         refbias_mingts: "100",
         refbias_xrange_min: "",
         refbias_xrange_max: "",
@@ -136,228 +138,238 @@ export const QcstrAnalysis = () => {
 
     return (
         <>
-            <h1>QcSTR  </h1>
-            <ButtonGroup size="lg" className="mb-2">
-                <Button variant="light" onClick={qcstrA}>
-                    New Analysis
-                </Button>
-                <Button disabled={true} variant="light" onClick={qcstrResult}>
-                    Results
-                </Button>
-            </ButtonGroup>
-
-            <Formik
-                initialValues={formValues || initialValues}
-                enableReinitialize
-                validationSchema={validationSchema}
-                onSubmit={handlFormSubmit}
-                validateOnMount
-            >
-                {({ values, handleChange, handleSubmit, isValid }) => (
-                    <div>
-                        <Form onSubmit={Formik.handleSubmit}>
-                            <Row className="mb-3">
-                                <Col>
-                                    {LoadTestData({
-                                        // classes: classes,
-                                        useTest: useTest,
-                                        handleUseTest: handleUseTest,
-                                        handleRemoveUseTest: handleRemoveUseTest,
-                                        // onclick: () => setFormValues(testValues)
-                                    })}
-                                </Col>
-                            </Row>
-                        </Form>
-
-                        <Row className="mb-3">
-                            <Form.Group as={Col} className="mb-3" controlId="email">
-                                <Form.Label>email</Form.Label>
-                                <Field
-                                    type="email"
-                                    name="email"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.email}
-                                />
-                                <ErrorMessage
-                                    name="email"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                            <Form.Group as={Col} controlId="job_name">
-                                <Form.Label>job_name</Form.Label>
-                                <Field
-                                    type="text"
-                                    name="job_name"
-                                    className="form-control"
-                                    onChange={handleChange}
-                                    value={values.job_name}
-                                />
-                                <ErrorMessage
-                                    name="job_name"
-                                    component="div"
-                                    className="text-danger"
-                                />
-                            </Form.Group>
-                        </Row>
-
-                        <div className="form-control" ref={fileInput}>
-                            <label htmlFor="file">vcf</label>
-                            <Field type="file" name="file" onChange={handleFileChange} />
-                            <div>
-                                <p>{filename || ""}</p>
-                            </div>
-                            <ErrorMessage name="file" />
+            <div className="login-page">
+                <div className="form">
+                    <div className="login">
+                        <div className="login-header">
+                            <h3>QcSTR</h3>
                         </div>
-
-                        <Accordion>
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header>Other General Parameters</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="vcftype">
-                                            <Form.Label>vcftype</Form.Label>
-                                            <Form.Select
-                                                aria-label="Default select example"
-                                                onChange={handleChange}
-                                                name="vcftype"
-                                            >
-                                                <option>auto</option>
-                                                <option value="advntr">advntr</option>
-                                                <option value="hipstr">hipstr</option>
-                                                <option value="gangstr">gangstr</option>
-                                                <option value="gangstr">popstr</option>
-                                                <option value="eh">eh</option>
-                                            </Form.Select>
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="period">
-                                            <Form.Label>period</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="period"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.period}
-                                            />
-                                            <ErrorMessage
-                                                name="period"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-
-                            <Accordion.Item eventKey="1">
-                                <Accordion.Header>Reference Bias Plot Options</Accordion.Header>
-                                <Accordion.Body>
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="refbias_metric">
-                                            <Form.Label>refbias_metric</Form.Label>
-                                            <Form.Select
-                                                aria-label="Default select example"
-                                                onChange={handleChange}
-                                                name="refbias_metric"
-                                            >
-                                                <option>mean</option>
-                                                <option value="advntr">medium</option>
-
-                                            </Form.Select>
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="refbias_binsize">
-                                            <Form.Label>refbias_binsize</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="refbias_binsize"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.refbias_binsize}
-                                            />
-                                            <ErrorMessage
-                                                name="refbias_binsize"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="refbias_mingts">
-                                            <Form.Label>refbias_mingts</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="refbias_mingts"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.refbias_mingts}
-                                            />
-                                            <ErrorMessage
-                                                name="refbias_mingts"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="refbias_xrange_min">
-                                            <Form.Label>refbias_xrange_min</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="refbias_xrange_min"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.refbias_xrange_min}
-                                            />
-                                            <ErrorMessage
-                                                name="refbias_xrange_min"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-
-                                    <Row className="mb-3">
-                                        <Form.Group as={Col} controlId="refbias_xrange_max">
-                                            <Form.Label>refbias_xrange_max</Form.Label>
-                                            <Field
-                                                type="number"
-                                                name="refbias_xrange_max"
-                                                className="form-control"
-                                                onChange={handleChange}
-                                                value={values.refbias_xrange_max}
-                                            />
-                                            <ErrorMessage
-                                                name="refbias_xrange_max"
-                                                component="div"
-                                                className="text-danger"
-                                            />
-                                        </Form.Group>
-                                    </Row>
-                                </Accordion.Body>
-                            </Accordion.Item>
-
-                        </Accordion>
-
-
-                        <h1> </h1>
-                        <button type="button" disabled={!isValid} onClick={handleSubmit}>
-                            Submit
-                        </button>
                     </div>
-                )}
-            </Formik>
+
+                    <ButtonGroup size="lg" className="mb-2">
+                        <Button variant="light" onClick={qcstrA}>
+                            Analysis
+                        </Button>
+                        <Button disabled={true} variant="light" onClick={qcstrResult}>
+                            Results
+                        </Button>
+                    </ButtonGroup>
+
+                    <Formik
+                        initialValues={formValues || initialValues}
+                        enableReinitialize
+                        validationSchema={validationSchema}
+                        onSubmit={handlFormSubmit}
+                        validateOnMount
+                    >
+                        {({ values, handleChange, handleSubmit, isValid }) => (
+                            <div>
+                                <Form onSubmit={Formik.handleSubmit}>
+                                    <Row className="mb-3">
+                                        <Col>
+                                            {LoadTestData({
+                                                // classes: classes,
+                                                useTest: useTest,
+                                                handleUseTest: handleUseTest,
+                                                handleRemoveUseTest: handleRemoveUseTest,
+                                                // onclick: () => setFormValues(testValues)
+                                            })}
+                                        </Col>
+                                    </Row>
+                                </Form>
+
+                                <Row className="mb-3">
+                                    <Form.Group as={Col} className="mb-3" controlId="email">
+                                        <Form.Label className='card-title'>email</Form.Label>
+                                        <Field
+                                            type="email"
+                                            name="email"
+                                            className="form-control"
+                                            onChange={handleChange}
+                                            value={values.email}
+                                        />
+                                        <ErrorMessage
+                                            name="email"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </Form.Group>
+                                    <Form.Group as={Col} controlId="job_name">
+                                        <Form.Label className='card-title'>job name</Form.Label>
+                                        <Field
+                                            type="text"
+                                            name="job_name"
+                                            className="form-control"
+                                            onChange={handleChange}
+                                            value={values.job_name}
+                                        />
+                                        <ErrorMessage
+                                            name="job_name"
+                                            component="div"
+                                            className="text-danger"
+                                        />
+                                    </Form.Group>
+                                </Row>
+
+                                <div className="form-control" ref={fileInput}>
+                                    <label htmlFor="file" className='card-title'>vcf</label>
+                                    <input type="file" name="file" onChange={handleFileChange} />
+                                    <div>
+                                        <p>{filename || ""}</p>
+                                    </div>
+                                    <ErrorMessage name="file" />
+                                </div>
+
+                                <Accordion>
+                                    <Accordion.Item eventKey="0">
+                                        <Accordion.Header>Other General Parameters</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="vcftype">
+                                                    <Form.Label className='card-title'>vcftype</Form.Label>
+                                                    <Field
+                                                        as="select"
+                                                        aria-label="Default select example"
+                                                        onChange={handleChange}
+                                                        name="vcftype"
+                                                    >
+                                                        <option>auto</option>
+                                                        <option value="advntr">advntr</option>
+                                                        <option value="hipstr">hipstr</option>
+                                                        <option value="gangstr">gangstr</option>
+                                                        <option value="gangstr">popstr</option>
+                                                        <option value="eh">eh</option>
+                                                    </Field>
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="period">
+                                                    <Form.Label className='card-title'>period</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="period"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.period}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="period"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+
+                                    <Accordion.Item eventKey="1">
+                                        <Accordion.Header>Reference Bias Plot Options</Accordion.Header>
+                                        <Accordion.Body>
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="refbias_metric">
+                                                    <Form.Label className='card-title'>refbias_metric</Form.Label>
+                                                    <Form.Select
+                                                        aria-label="Default select example"
+                                                        onChange={handleChange}
+                                                        name="refbias_metric"
+                                                    >
+                                                        <option>mean</option>
+                                                        <option value="advntr">medium</option>
+
+                                                    </Form.Select>
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="refbias_binsize">
+                                                    <Form.Label className='card-title'>refbias_binsize</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="refbias_binsize"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.refbias_binsize}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="refbias_binsize"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="refbias_mingts">
+                                                    <Form.Label className='card-title'>refbias_mingts</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="refbias_mingts"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.refbias_mingts}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="refbias_mingts"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="refbias_xrange_min">
+                                                    <Form.Label className='card-title'>refbias_xrange_min</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="refbias_xrange_min"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.refbias_xrange_min}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="refbias_xrange_min"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+
+                                            <Row className="mb-3">
+                                                <Form.Group as={Col} controlId="refbias_xrange_max">
+                                                    <Form.Label className='card-title'>refbias_xrange_max</Form.Label>
+                                                    <Field
+                                                        type="number"
+                                                        name="refbias_xrange_max"
+                                                        className="form-control"
+                                                        onChange={handleChange}
+                                                        value={values.refbias_xrange_max}
+                                                    />
+                                                    <ErrorMessage
+                                                        name="refbias_xrange_max"
+                                                        component="div"
+                                                        className="text-danger"
+                                                    />
+                                                </Form.Group>
+                                            </Row>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+
+                                </Accordion>
+
+
+                                <h1> </h1>
+                                <button type="button" disabled={!isValid} onClick={handleSubmit}>
+                                    Submit
+                                </button>
+                            </div>
+                        )}
+                    </Formik>
+                </div >
+            </div >
         </>
     );
 };

@@ -2,10 +2,11 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Countdown from 'react-countdown';
 import axios, { backendURL } from "../../axios-client";
 
 export const HipstrResult = () => {
@@ -13,8 +14,9 @@ export const HipstrResult = () => {
     const [loading, setLoading] = useState(true);
     const [result, setResult] = useState({});
 
-    useEffect(() => {
-        setLoading(true);
+    const updateState = useCallback(async () => {
+        // useEffect(() => {
+        //     setLoading(true);
         axios
             .get(`/hipstr/noauth/jobs/${jobId}`)
             .then((response) => {
@@ -26,6 +28,12 @@ export const HipstrResult = () => {
                 toast.error(error.response.data.message);
                 setLoading(false);
             });
+    }, []);
+
+    useEffect(() => {
+        setLoading(true);
+        let intervalid = setInterval(updateState, 5000);
+        return () => clearInterval(intervalid);
     }, [jobId]);
     console.log(result)
 
@@ -57,74 +65,47 @@ export const HipstrResult = () => {
                 </div>
             )}
             {!loading && result.status === "queued" && (
-                <div>
-                    Job is currently queued...Please refresh page to recheck status
+                // <div>
+                //     Job is currently queued...Please refresh page to recheck status
+                // </div>
+                <div className="w-100 d-flex justify-content-center mt-3">
+                    <Spinner className="spinner" animation="border" variant="dark" /><br />
+                    <div>Please wait, your job is running...</div>
                 </div>
             )}
             {!loading && result.status === "running" && (
-                <div>
-                    Job is currently running...Please refresh page to recheck status
+                // <div>
+                //     Job is currently running...Please refresh page to recheck status
+                // </div>
+                <div className="w-100 d-flex justify-content-center mt-3">
+                    <Spinner className="spinner" animation="border" variant="dark" /><br />
+                    <div>Please wait, your job is running...</div>
+                </div>
+            )}
+            {result.status !== "completed" && (
+                <div className='footer-countdown'>
+                    <Countdown date={Date.now() + 20000} />
                 </div>
             )}
             {!loading && result.status === "completed" && (
                 <div className="d-grid gap-2 w-50 p-4" >
                     <Button
-                        variant="secondary"
+                        variant="success"
                         target={"_blank"}
                         size="lg"
                         href={`${backendURL}/results${result.hipFile}`}
                     >
-                        Download hip-samplehip.tab
+                        Download hipstr_calls.vcf.gz
                     </Button>
 
                     <Button
-                        variant="secondary"
+                        variant="success"
                         target={"_blank"}
                         size="lg"
                         href={`${backendURL}/results${result.hipFile2}`}
                     >
-                        Download hip-samplehip plot
+                        Download hipstr_calls.viz.gz
                     </Button>
-
-                    <Button
-                        variant="secondary"
-                        target={"_blank"}
-                        size="lg"
-                        href={`${backendURL}/results${result.hipFile3}`}
-                    >
-                        Download hip-overall.tab
-                    </Button>
-
-                    <Button
-                        variant="secondary"
-                        target={"_blank"}
-                        size="lg"
-                        href={`${backendURL}/results${result.hipFile4}`}
-                    >
-                        Download hip-locuship.tab
-                    </Button>
-
-                    <Button
-                        variant="secondary"
-                        target={"_blank"}
-                        size="lg"
-                        href={`${backendURL}/results${result.hipFile5}`}
-                    >
-                        Download hip-locuship plot
-                    </Button>
-
-                    <Button
-                        variant="secondary"
-                        target={"_blank"}
-                        size="lg"
-                        href={`${backendURL}/results${result.hipFile6}`}
-                    >
-                        Download quality-per-sample plot
-                    </Button>
-
-
-
-
 
 
                 </div>

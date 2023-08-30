@@ -10,6 +10,9 @@ import Carousel from 'react-bootstrap/Carousel';
 export const Home = () => {
   const navigate = useNavigate();
 
+  const tools = () => {
+    navigate("/tools");
+  };
   const gangstr = () => {
     navigate("/tools/gangstr");
   };
@@ -37,19 +40,12 @@ export const Home = () => {
 
   return (
     <>
-      {/* <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src={require("./tandem.png")} />
-        <Card.Body>
-          <Card.Title>Card Title</Card.Title>
-          <Card.Text>A one-stop platform for tandem repeat analysis</Card.Text>
-        </Card.Body>
-      </Card>
-      <br /> */}
-      <Carousel slide={false} variant="dark">
+
+      {/* <Carousel slide={false} variant="dark">
         <Carousel.Item interval={1000}>
           <img
             className="d-block w-100"
-            src={require("../images/dna.jpg")}
+            src={require("../images/dna green.jpg")}
             alt="First slide"
           />
           <Carousel.Caption>
@@ -60,7 +56,7 @@ export const Home = () => {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src={require("../images/dna2.jpg")}
+            src={require("../images/dna green.jpg")}
             alt="Second slide"
           />
 
@@ -72,7 +68,7 @@ export const Home = () => {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src={require("../images/dan3.jpeg")}
+            src={require("../images/dna green.jpg")}
             alt="Third slide"
           />
 
@@ -84,21 +80,13 @@ export const Home = () => {
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
-      {/* );
-} */}
 
       <br />
-
-
-
-
-
-
 
       <Row xs={2} md={4} className="g-2 p-4" >
         <Col>
           <Card>
-            {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+
             <Card.Body>
               <Card.Title>HipSTR</Card.Title>
               <Card.Text>
@@ -106,13 +94,13 @@ export const Home = () => {
               </Card.Text>
             </Card.Body>
             <Card.Footer>
-              <Button variant="secondary" size="lg" onClick={hipstr}> HipSTR </Button>
+              <Button variant="success" size="lg" onClick={hipstr}> HipSTR </Button>
             </Card.Footer>
           </Card>
         </Col>
         <Col>
           <Card>
-            {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+
             <Card.Body>
               <Card.Title>GangSTR </Card.Title>
               <Card.Text>
@@ -120,13 +108,13 @@ export const Home = () => {
               </Card.Text>
             </Card.Body>
             <Card.Footer>
-              <Button variant="secondary" size="lg" onClick={gangstr}> GangSTR </Button>
+              <Button variant="success" size="lg" onClick={gangstr}> GangSTR </Button>
             </Card.Footer>
           </Card>
         </Col>
         <Col>
           <Card>
-            {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+
             <Card.Body>
               <Card.Title>ExpansionHunter</Card.Title>
               <Card.Text>
@@ -134,13 +122,13 @@ export const Home = () => {
               </Card.Text>
             </Card.Body>
             <Card.Footer>
-              <Button variant="secondary" size="lg" onClick={eh}> ExpansionHunter </Button>
+              <Button variant="success" size="lg" onClick={eh}> ExpansionHunter </Button>
             </Card.Footer>
           </Card>
         </Col>
         <Col>
           <Card>
-            {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+
             <Card.Body>
               <Card.Title>dumpSTR </Card.Title>
               <Card.Text>
@@ -148,13 +136,13 @@ export const Home = () => {
               </Card.Text>
             </Card.Body>
             <Card.Footer>
-              <Button variant="secondary" size="lg" onClick={dumpstr}> dumpSTR </Button>
+              <Button variant="success" size="lg" onClick={dumpstr}> dumpSTR </Button>
             </Card.Footer>
           </Card>
         </Col>
         <Col>
           <Card>
-            {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+
             <Card.Body>
               <Card.Title>mergeSTR</Card.Title>
               <Card.Text>
@@ -162,13 +150,13 @@ export const Home = () => {
               </Card.Text>
             </Card.Body>
             <Card.Footer>
-              <Button variant="secondary" size="lg" onClick={mergestr}> mergeSTR </Button>
+              <Button variant="success" size="lg" onClick={mergestr}> mergeSTR </Button>
             </Card.Footer>
           </Card>
         </Col>
         <Col>
           <Card>
-            {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+
             <Card.Body>
               <Card.Title>qcSTR </Card.Title>
               <Card.Text>
@@ -176,13 +164,13 @@ export const Home = () => {
               </Card.Text>
             </Card.Body>
             <Card.Footer>
-              <Button variant="secondary" size="lg" onClick={qcstr}> qcSTR </Button>
+              <Button variant="success" size="lg" onClick={qcstr}> qcSTR </Button>
             </Card.Footer>
           </Card>
         </Col>
         <Col>
           <Card>
-            {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+
             <Card.Body>
               <Card.Title>statSTR</Card.Title>
               <Card.Text>
@@ -190,13 +178,13 @@ export const Home = () => {
               </Card.Text>
             </Card.Body>
             <Card.Footer>
-              <Button variant="secondary" size="lg" onClick={statstr}> statSTR </Button>
+              <Button variant="success" size="lg" onClick={statstr}> statSTR </Button>
             </Card.Footer>
           </Card>
         </Col>
         <Col>
           <Card>
-            {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
+
             <Card.Body>
               <Card.Title>compareSTR</Card.Title>
               <Card.Text>
@@ -204,12 +192,57 @@ export const Home = () => {
               </Card.Text>
             </Card.Body>
             <Card.Footer>
-              <Button variant="secondary" size="lg" onClick={comparestr}> compareSTR </Button>
+              <Button variant="success" size="lg" onClick={comparestr}> compareSTR </Button>
             </Card.Footer>
           </Card>
         </Col>
       </Row>
-      <br />
+      <br /> */}
+
+      <div class="Hero_Hero__3IUGZ">
+        <div class="Hero_container__nTWTD">
+          <div class="Hero_Col1__hei_w">
+            <p class="Hero_main_header__qSRC0">TRp</p>
+            <p class="Hero_sub_content__1zOEH">TRp is a web based application developed to make analysis of tandem repeat easier. It host Genotyping tools as well as several other tools for downstream analysis of tandem repeats.</p>
+            {/* <div class="Hero_buttons__2u9Q0">
+              <button class="MuiButtonBase-root MuiButton-root MuiButton-outlined Hero_tool_button__3EPwZ MuiButton-outlinedPrimary" tabindex="0" type="button">
+                <span class="MuiButton-label">
+                  <a class="Hero_link__3PPD6" href="/tools" onClick={hipstr} >Tools</a>
+                 
+
+                </span>
+                <span class="MuiTouchRipple-root"></span>
+              </button>
+              <button class="MuiButtonBase-root MuiButton-root MuiButton-contained Hero_workflow_button__2GL2G MuiButton-containedSecondary" tabindex="0" type="button">
+                <span class="MuiButton-label">
+                  <a class="Hero_link__3PPD6" href="/workflows">Run Workflow</a>
+                </span>
+                <span class="MuiTouchRipple-root"></span>
+              </button>
+            </div> */}
+
+            <Button variant="success" size="lg" onClick={tools}> Tools </Button>
+          </div>
+          <div class="Hero_Col2__1wzl5">
+            <div class="BoxImage_BoxImages__1jAHk">
+              <div class="BoxImage_Image__2g921 BoxImage_ImageOne__2DbDr">
+                <img src={require("../images/dna green.jpg")} alt="banner1"></img>
+              </div>
+              <div class="BoxImage_Image__2g921 BoxImage_ImageTwo__-DB6r">
+                <img src={require("../images/dna2.jpg")} alt="metabolism"></img>
+              </div>
+              <div class="BoxImage_Image__2g921 BoxImage_ImageThree__18KRo">
+                <img src={require("../images/TRp.png")} alt="banner2"></img>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
+
+
+
+
+

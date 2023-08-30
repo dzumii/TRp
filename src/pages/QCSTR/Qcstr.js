@@ -18,27 +18,36 @@ export const Qcstr = () => {
     <>
       <h1>QcSTR </h1>
       <ButtonGroup size="lg" className="mb-2">
-        <Button variant="light" onClick={qcstrA}>New Analysis</Button>
-        <Button variant="light" onClick={qcstrR}>Results</Button>
+        <Button variant="light" onClick={qcstrA} className='card-button'>New Analysis</Button>
+        <Button variant="light" onClick={qcstrR} className='card-button'>Results</Button>
       </ButtonGroup>
       <Card style={{ padding: '0px' }}>
         <Card.Body >
           <div class="Compare">
             <div class="Compare__1hUWQ">
               <div class="MuiPaper-root Home_paper__1euug MuiPaper-outlined MuiPaper-rounded">
-                <p>Please see full documentation and examples at https://trtools.readthedocs.io/en/latest/source/qcSTR.html</p>
+
+                <p>Please see full documentation and examples
+                  <a href="https://trtools.readthedocs.io/en/latest/source/qcSTR.html" > here</a>
+                </p>
+                <p>
+                  Users are also advised to run this tool offline in cases where the dataset is heavy. Instructions on how to install and run this tool offline is available
+                  <a href="https://github.com/gymreklab/TRTools" > here</a>
+                </p>
+
+
                 <ol>
-                  <h3>Usage</h3>
+                  <h3 className='card-title'>Usage</h3>
                   <p>qcSTR takes as input a VCF file and outputs several plots in pdf format. </p>
 
 
-                  <h3>Required Parameters:</h3>
+                  <h3 className='card-title'>Required Parameters:</h3>
                   <ul>
                     <li>vcfs (VCF):Input VCF file.</li>
 
                   </ul>
 
-                  <h3>Reference Bias Plot Options</h3>
+                  <h3 className='card-title'>Reference Bias Plot Options</h3>
                   <ul>
                     <li>refbias-binsize (int): Sets the binsize (in bp) used to bin x-axis values, which give the reference TR length. Default=5.</li>
                     <li>refbias-metric (string): Determines which metric to use to summarize the reference bias in each bin. Default=mean. Must be one of: mean or median.</li>
@@ -48,7 +57,7 @@ export const Qcstr = () => {
                     <li></li>
                   </ul>
 
-                  <h3>Outputs</h3>
+                  <h3 className='card-title'>Outputs</h3>
                   <p>qcSTR outputs the following plots:</p>
                   <ul>
                     <li>qc-sample-callnum.pdf: a barplot giving the number of calls for each sample. Can be used to determine failed or outlier samples.</li>

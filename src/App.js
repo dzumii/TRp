@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Tools } from "./pages/Tools";
 import { Login } from "./pages/Login";
-import { Workflow } from "./pages/WORKFLOW/Workflow";
+import { Workflow } from "./pages/TRPSTR/trpstr";
 import { Navbarr } from "./Navbar";
 
 import { Gangstr } from './pages/GANGSTR/Gangstr';
@@ -41,8 +41,8 @@ import { ComparestrResult } from './pages/COMPARESTR/comparestrresult';
 import { Register } from './pages/Register';
 
 // import { Workflow } from './pages/Workflow';
-import { WorkflowAnalysis } from './pages/WORKFLOW/Workflowanalysis';
-import { WorkflowResult } from './pages/WORKFLOW/Workflowresult';
+import { TrpstrAnalysis } from './pages/TRPSTR/trpstranalysis';
+import { TrpstrResult } from './pages/TRPSTR/Trpstrresult';
 
 import { ToastContainer } from 'react-toastify';
 
@@ -61,10 +61,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/workflow" element={<Workflow />} />
 
-          <Route path="/workflow/newanalysis" element={<WorkflowAnalysis />} />
+          <Route path="/workflow/newanalysis" element={<TrpstrAnalysis />} />
           <Route
-            path="/workflow/result"
-            element={<WorkflowResult />}
+            path="/workflow/result/:jobId"
+            element={<TrpstrResult />}
           />
 
           <Route path="/login/register" element={<Register />} />

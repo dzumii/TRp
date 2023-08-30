@@ -5,22 +5,9 @@ import Navbar from 'react-bootstrap/Navbar';
 
 export const Navbarr = () => {
   return (
-    // <Nav fill variant="tabs" >
-    //   <Nav.Item>
-    //     <Nav.Link href="/">Home</Nav.Link>
-    //   </Nav.Item>
-    //   <Nav.Item>
-    //     <Nav.Link href="/tools">Tools</Nav.Link>
-    //   </Nav.Item>
-    //   <Nav.Item>
-    //     <Nav.Link href="/tutorials">Tutorials</Nav.Link>
-    //   </Nav.Item>
-    //   <Nav.Item>
-    //     <Nav.Link href="/workflow">Workflows</Nav.Link>
-    //   </Nav.Item>
-    // </Nav>
 
-    <Navbar bg="secondary" variant="dark">
+
+    <Navbar bg="success" variant="dark">
       <Container>
         <Navbar.Brand href="/">TRp</Navbar.Brand>
         <Nav className="me-auto">

@@ -1,0 +1,143 @@
+' @startuml
+
+' actor User
+' participant ReactApp as "React Frontend"
+' participant NodeBackend as "Node.js Backend"
+' participant MongoDB as "MongoDB Database"
+
+' User -> ReactApp: Interacts with UI
+
+' ReactApp -> ReactApp: Display UI components
+
+' User -> ReactApp: Fills out form and submits
+
+' ReactApp -> NodeBackend: HTTP POST /mergestr/noauth/jobs
+
+' NodeBackend -> MongoDB: Save form data and files
+
+' NodeBackend --> ReactApp: Response with jobId
+
+' ReactApp -> ReactApp: Update UI with jobId
+
+' User -> ReactApp: Uploads files
+
+' ReactApp -> NodeBackend: HTTP POST /mergestr/noauth/jobs (with files)
+
+' NodeBackend -> MongoDB: Store uploaded files
+
+' User -> ReactApp: Clicks Submit button
+
+' ReactApp -> ReactApp: Validate form data
+
+' ReactApp -> NodeBackend: HTTP POST /mergestr/noauth/jobs (validated data)
+
+' NodeBackend -> MongoDB: Save validated data
+
+' NodeBackend --> ReactApp: Response with jobId
+
+' ReactApp -> ReactApp: Update UI with jobId
+
+' @enduml
+
+
+
+
+@startuml
+
+actor User
+participant ReactApp as "React Frontend"
+participant NodeBackend as "Node.js Backend"
+participant MongoDB as "MongoDB Database"
+participant axios as "axios Library"
+participant useParams as "useParams Hook"
+participant useEffect as "useEffect Hook"
+participant useState as "useState Hook"
+participant toast as "react-toastify Library"
+participant Spinner as "Spinner Component"
+participant Link as "Link Component"
+
+User -> ReactApp: Interacts with UI
+
+ReactApp -> ReactApp: Display UI components
+
+ReactApp -> useParams: Access job ID from URL
+
+ReactApp -> useEffect: Fetch job results
+
+useEffect -> axios: Send GET request to /mergestr/noauth/jobs/:jobId
+
+axios -> NodeBackend: HTTP GET /mergestr/noauth/jobs/:jobId
+
+NodeBackend -> MongoDB: Retrieve job data
+
+NodeBackend --> axios: Response with job data
+
+axios --> useEffect: Response with job data
+
+useEffect -> ReactApp: Update loading and result states
+
+ReactApp -> ReactApp: Conditional rendering based on job status
+
+ReactApp -> Link: Generate links for New Analysis and Results
+
+ReactApp -> Spinner: Display spinner while loading
+
+ReactApp -> toast: Display error message if API call fails
+
+ReactApp -> Link: Generate link to download results
+
+ReactApp -> ReactApp: Display job status messages
+
+@enduml
+
+
+
+
+' @startuml
+
+' start
+' :User fills out form;
+' :Validate form inputs;
+' if (Inputs are valid?) then (yes)
+'   :Prepare form data;
+'   if (Files selected?) then (yes)
+'     :Upload files;
+'   else (no)
+'     :Skip file upload;
+'   endif
+'   :Send data to backend;
+'   :Display loading spinner;
+'   if (Job successful?) then (yes)
+'     :Display success message;
+'   else (no)
+'     :Display error message;
+'   endif
+' else (no)
+'   :Display validation errors;
+' endif
+' stop
+
+' @enduml
+
+
+' @startuml
+
+' start
+' :Fetch job ID from URL parameters;
+' :Initialize loading state;
+' if (Loading?) then (yes)
+'   :Display loading spinner;
+' else (no)
+'   if (Job status is "queued") then (yes)
+'     :Display queued message;
+'   else if (Job status is "running") then (yes)
+'     :Display running message;
+'   else if (Job status is "completed") then (yes)
+'     :Display download button;
+'   else if (Job status is "failed") then (yes)
+'     :Display failure message;
+'   endif
+' endif
+' stop
+
+' @enduml

@@ -69,7 +69,7 @@ export const GangstrResult = () => {
             {!loading && result.status === "completed" && (
                 <div className="d-grid gap-2 w-50 p-4" >
                     <Button
-                        variant="secondary"
+                        variant="success"
                         target={"_blank"}
                         size="lg"
                         href={`${backendURL}/results${result.gangFile}`}
@@ -78,7 +78,7 @@ export const GangstrResult = () => {
                     </Button>
 
                     <Button
-                        variant="secondary"
+                        variant="success"
                         target={"_blank"}
                         size="lg"
                         href={`${backendURL}/results${result.gangFile2}`}
@@ -87,7 +87,7 @@ export const GangstrResult = () => {
                     </Button>
 
                     <Button
-                        variant="secondary"
+                        variant="success"
                         target={"_blank"}
                         size="lg"
                         href={`${backendURL}/results${result.gangFile3}`}
@@ -96,7 +96,7 @@ export const GangstrResult = () => {
                     </Button>
 
                     <Button
-                        variant="secondary"
+                        variant="success"
                         target={"_blank"}
                         size="lg"
                         href={`${backendURL}/results${result.gangFile4}`}
@@ -105,7 +105,7 @@ export const GangstrResult = () => {
                     </Button>
 
                     <Button
-                        variant="secondary"
+                        variant="success"
                         target={"_blank"}
                         size="lg"
                         href={`${backendURL}/results${result.gangFile5}`}
@@ -114,7 +114,7 @@ export const GangstrResult = () => {
                     </Button>
 
                     <Button
-                        variant="secondary"
+                        variant="success"
                         target={"_blank"}
                         size="lg"
                         href={`${backendURL}/results${result.gangFile6}`}
